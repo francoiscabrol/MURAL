@@ -19,6 +19,7 @@
 
 package com.cabrol.francois.mural.generator.rulebased.streaming
 
+import scala.collection.JavaConverters._
 import scala.actors.Actor
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveFactory
@@ -26,6 +27,8 @@ import com.cabrol.francois.libjamu.musictheory.entity.note.{RhythmicNote, Note}
 import com.cabrol.francois.mural.tools.Debug
 import com.cabrol.francois.mural.generator.rulebased.transition.TransitionalState
 import scala.collection.mutable.ListBuffer
+import com.cabrol.francois.libjamu.midi.entity.MidiNoteEvent
+import com.cabrol.francois.libjamu.midi.factory.MidiEventFactory
 
 /**
  * Created with IntelliJ IDEA.
@@ -52,19 +55,19 @@ class StreamGenerator(var param:Parameters) extends Actor{
 
     loop{
       react{
-          case PlayerMessages.next => { Debug.streamGenerator("Receive a message Next"); sender ! MessageBox(generateNextEvents) }
+          case PlayerMessages.next => { Debug.streamGenerator("Receive a message Next"); sender ! MessageBox(generateNextNotes) }
       }
     }
 
   }
 
-  def generateNextEvents:List[Note] = {
-    val notes = generateNextNotes
-    notes
+//  def generateNextEvents:List[MidiNoteEvent] = {
+//    val notes = generateNextNotes
+//    //notes
 //    notesHistory.appends(notes)
-//    val midiNoteEvents:List[MidiNoteEvent] = notes.map(_.getMidiNoteEvents.asScala.toList).flatten
+//    val midiNoteEvents:List[MidiNoteEvent] = notes.map(f => MidiEventFactory.getMidiNoteEvents(f).asScala.toList).flatten
 //    midiNoteEvents
-  }
+//  }
 
   def generateNextNotes:List[Note] = {
     if(notesHistory.isEmpty){
