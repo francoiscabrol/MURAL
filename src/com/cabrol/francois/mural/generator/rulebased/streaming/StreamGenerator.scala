@@ -19,16 +19,13 @@
 
 package com.cabrol.francois.mural.generator.rulebased.streaming
 
-import scala.collection.JavaConverters._
-import scala.actors.Actor
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveFactory
 import com.cabrol.francois.libjamu.musictheory.entity.note.{RhythmicNote, Note}
 import com.cabrol.francois.mural.tools.Debug
 import com.cabrol.francois.mural.generator.rulebased.transition.TransitionalState
 import scala.collection.mutable.ListBuffer
-import com.cabrol.francois.libjamu.midi.entity.MidiNoteEvent
-import com.cabrol.francois.libjamu.midi.factory.MidiEventFactory
+import scala.actors.Actor
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,7 +37,7 @@ object PlayerMessages extends Enumeration {
   val next = Value
 }
 
-class StreamGenerator(var param:Parameters) extends Actor{
+class StreamGenerator(var param:Parameters) extends Actor {
 
   val melodyCurveFactory:MelodyCurveFactory = new MelodyCurveFactory
   var currentTick:Int = 0;
@@ -85,7 +82,7 @@ class StreamGenerator(var param:Parameters) extends Actor{
 
   def generateANewBlock(lastNote:Note):List[Note] = {
 
-    def getLastNotePos(notes:List[Note]):Float = notes.last.getRhythmicNote.getStart + notes.last.getRhythmicNote.getDuration
+    def getLastNoteEnddingPos(notes:List[Note]):Float = notes.last.getRhythmicNote.getStart + notes.last.getRhythmicNote.getDuration
 
     def generateNewNote(lastNote:Note):Note = {
       Debug.streamGenerator("Generating another note...")
@@ -93,7 +90,7 @@ class StreamGenerator(var param:Parameters) extends Actor{
     }
 
     def addNewNote(notes:List[Note]):List[Note] = {
-      if( getLastNotePos(notes) >= (currentTick + indentTick)){
+      if( getLastNoteEnddingPos(notes) >= (currentTick + indentTick)){
         notes
       }
       else
