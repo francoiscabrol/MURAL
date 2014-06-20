@@ -1,4 +1,4 @@
-package com.cabrol.francois.mural.generator.rulebased.sequential
+package main.scala.com.cabrol.francois.mural
 
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.{Scale, Chord}
 import com.cabrol.francois.melvi.factory.MelodyVisualiserFactory
@@ -7,12 +7,13 @@ import java.awt.{Point, Toolkit}
 import scala.collection.mutable
 import com.cabrol.francois.mural.generator.rulebased.parameters._
 import com.cabrol.francois.mural.generator.rulebased.parameters.HarmonicDefinition
+import com.cabrol.francois.mural.generator.rulebased.sequential.{Generator, Methods}
 
 /**
  * Created with IntelliJ IDEA.
  * User: francois * Date: 2014-02-04
  */
-object Generator$Test {
+object Test {
   def main(args: Array[String]) = {
     print("Start the generator execution test")
 

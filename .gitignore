@@ -8,6 +8,20 @@ out/test
 *.iml
 *.iws
 
+# sbt specific
+.cache/
+.history/
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# Vim
+.*.swp
+
 # Mac
 .DS_Store
 
