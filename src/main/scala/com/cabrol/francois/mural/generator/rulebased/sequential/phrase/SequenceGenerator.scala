@@ -35,53 +35,6 @@ object SequenceGenerator {
 
   def generateSequence(parameters : Parameters):List[Note] = {
 
-    def phrasesGeneratorFactory:List[PhraseGenerator] = {
-
-      def stochasticPhraseDuration(startingPoint:Float):Float = {
-        val maxLenght = BigDecimal((parameters.global.sequenceLenght - startingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-        //println(maxLenght)
-        Math.round(RandomUtils.randomFloatBetween(1, maxLenght));
-      }
-
-      def stochasticSilenceBetweenTwoPhrases(endingPoint:Float):Float = {
-        val maxLenght = BigDecimal((parameters.global.sequenceLenght - endingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-        RandomUtils.randomFloatBetween(1, maxLenght)
-      }
-
-      def stochasticEndingPoint(startingPoint:Float):Float = {
-        val endingPoint = startingPoint + stochasticPhraseDuration(startingPoint: Float)
-        if(endingPoint > parameters.global.sequenceLenght)
-          parameters.global.sequenceLenght
-        else
-          Math.round(endingPoint)
-      }
-
-      def firstPhrase:PhraseGenerator = {
-        newPhrase(0)
-      }
-
-      def othersPhrase(lastPhraseGenerator:PhraseGenerator):PhraseGenerator = {
-        val startingPoint = Math.round(lastPhraseGenerator.endingPoint + stochasticSilenceBetweenTwoPhrases(lastPhraseGenerator.endingPoint))
-        newPhrase(startingPoint)
-      }
-
-      def newPhrase(startingPoint: Float):PhraseGenerator = {
-        val endingPoint = stochasticEndingPoint(startingPoint)
-        val startingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(startingPoint).chord.getRoot
-        val endingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(endingPoint).chord.getScaleNote(2)
-        new PhraseGenerator(startingPoint, endingPoint, startingNote, endingNote, parameters)
-      }
-
-      def addPhrase(phrases:List[PhraseGenerator]):List[PhraseGenerator] = {
-        if(phrases.last.endingPoint >= (parameters.global.sequenceLenght - 0.5))
-          phrases
-        else
-          addPhrase(phrases ::: List(othersPhrase(phrases.last)))
-      }
-
-      addPhrase(List(firstPhrase))
-    }
-
     def generatePhrase(sequence:List[Note], phrasesGenerator:List[PhraseGenerator], i:Int) : List[Note] = {
       if(i >= phrasesGenerator.length)
         sequence
@@ -89,8 +42,9 @@ object SequenceGenerator {
         generatePhrase(sequence ::: phrasesGenerator(i).generateThePhrase, phrasesGenerator, i+1)
     }
 
-    val p = phrasesGeneratorFactory
+    val p = sequenceOfPhraseGeneratorsFactory.create(parameters)
     for(x <- p) Debug.sequenceGenerator(x.toString)
+
     Debug.sequenceGenerator("---- \n")
     generatePhrase(List[Note](), p, 0)
   }
