@@ -25,41 +25,80 @@ import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 import com.cabrol.francois.mural.tools.Debug
 import com.cabrol.francois.mural.generator.rulebased.transition.TransitionalState
 
-
+/**
+ *
+ * @param startingPoint is the moment in the time where the phrase starts
+ * @param endingPoint is the moment in the time where the phrase ends
+ * @param startingNote is the function of the first note in the harmony
+ * @param endingNote is the function of the end note in the harmony
+ * @param param is the parameters used
+ */
 case class PhraseGenerator(val startingPoint:Float,
                            val endingPoint:Float,
                            val startingNote:ScaleNote,
                            val endingNote:ScaleNote,
                            val param:Parameters) {
 
+  private val melodyCurveFactory:MelodyCurveFactory = new MelodyCurveFactory
+
+  /**
+   * Get the position in the time of the last note
+   * @param notes is the sequence of notes of the current phrase
+   * @return the last note
+   */
+  private def getLastNotePos(notes:List[Note]):Float = notes.last.getRhythmicNote.getStart + notes.last.getRhythmicNote.getDuration
+
+  /**
+   * Generate the first note
+   * @return the first note
+   */
+  private def generateFirstNote:Note = {
+    Debug.phraseGenerator("Generating the first note...")
+    new TransitionalState(param, None, Some(startingNote), Some(new RhythmicNote(startingPoint, 0)), None, melodyCurveFactory).generateSingleNote
+  }
+
+  /**
+   * Generate a new note (from the last one)
+   * @param lastNote is the last note generated
+   * @return the new note generated
+   */
+  private def generateNewNote(lastNote:Note):Note = {
+    Debug.phraseGenerator("Generating another note...")
+    new TransitionalState(param, Some(lastNote), None, None, None, melodyCurveFactory).generateSingleNote
+  }
+
+  /**
+   * Generate the last note of the phrase
+   * from the last one but with the pitch constrained by the param endingNote
+   * @param lastNote is the last note generated
+   * @return the new note generated
+   */
+  private def generateLastNote(lastNote:Note):Note = {
+    Debug.phraseGenerator("Generating the last note...")
+    new TransitionalState(param, Some(lastNote), Some(endingNote), None, None, melodyCurveFactory).generateSingleNote
+  }
+
+  /**
+    * Generate the phrase
+   * @return the generated phrase as a list of note
+   */
   def generateThePhrase:List[Note] = {
 
-    val melodyCurveFactory:MelodyCurveFactory = new MelodyCurveFactory
     melodyCurveFactory.randomizeCurbType
 
-    def getLastNotePos(notes:List[Note]):Float = notes.last.getRhythmicNote.getStart + notes.last.getRhythmicNote.getDuration
-
-    def generateFirstNote:Note = {
-      Debug.phraseGenerator("Generating the first note...")
-      new TransitionalState(param, None, Some(startingNote), Some(new RhythmicNote(startingPoint, 0)), None, melodyCurveFactory).generateSingleNote
-    }
-
-    def generateNewNote(lastNote:Note):Note = {
-      Debug.phraseGenerator("Generating another note...")
-      new TransitionalState(param, Some(lastNote), None, None, None, melodyCurveFactory).generateSingleNote
-    }
-
+    /**
+     * Add a new note until
+     * @param notes is the sequence of notes generated for the current phrase
+     * @return the phrase with the new note generated as a list of notes
+     */
     def addNewNote(notes:List[Note]):List[Note] = {
       if( getLastNotePos(notes) >= param.global.sequenceLenght || getLastNotePos(notes) >= endingPoint){
+        // if the last note in positioned after the end of the phrase or after the end of all the sequence
+        // delete the last one and generate a new one with the good method to ending the phrase
         notes.drop(-1) ::: List(generateLastNote(notes.last))
       }
       else
         addNewNote(notes ::: List(generateNewNote(notes.last)))
-    }
-
-    def generateLastNote(lastNote:Note):Note = {
-      Debug.phraseGenerator("Generating the last note...")
-      new TransitionalState(param, Some(lastNote), Some(endingNote), None, None, melodyCurveFactory).generateSingleNote
     }
 
     Debug.phraseGenerator("Generating a new phrase: " + "\n" + this.toString + "\n")
