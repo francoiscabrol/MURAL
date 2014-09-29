@@ -4,10 +4,12 @@ import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.{Scale, Chord}
 import com.cabrol.francois.melvi.factory.MelodyVisualiserFactory
 import com.cabrol.francois.melvi.view.VisualiserView
 import java.awt.{Point, Toolkit}
+import com.cabrol.francois.mural.generator.rulebased.Generator
+import com.cabrol.francois.mural.generator.rulebased.method.Methods
+
 import scala.collection.mutable
 import com.cabrol.francois.mural.generator.rulebased.parameters._
 import com.cabrol.francois.mural.generator.rulebased.parameters.HarmonicDefinition
-import com.cabrol.francois.mural.generator.rulebased.sequential.{Generator, Methods}
 
 /**
  * Created with IntelliJ IDEA.

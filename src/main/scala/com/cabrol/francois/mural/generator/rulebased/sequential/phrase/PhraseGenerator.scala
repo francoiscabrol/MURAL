@@ -17,13 +17,14 @@
  *     along with MURAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.cabrol.francois.mural.generator.rulebased.sequential
+package com.cabrol.francois.mural.generator.rulebased.sequential.phrase
 
+import com.cabrol.francois.libjamu.musictheory.entity.note.{Note, RhythmicNote}
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
-import com.cabrol.francois.libjamu.musictheory.entity.note.{RhythmicNote, Note}
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
+import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveFactory
+import com.cabrol.francois.mural.generator.rulebased.sequential.transition.TransitionalState
 import com.cabrol.francois.mural.tools.Debug
-import com.cabrol.francois.mural.generator.rulebased.transition.TransitionalState
 
 /**
  *

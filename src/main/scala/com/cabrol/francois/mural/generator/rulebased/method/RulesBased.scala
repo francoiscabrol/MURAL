@@ -17,13 +17,17 @@
  *     along with MURAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.cabrol.francois.mural.generator.rulebased.sequential
+package com.cabrol.francois.mural.generator.rulebased.method
 
 import com.cabrol.francois.libjamu.musictheory.entity.note.Note
+import com.cabrol.francois.mural.generator.rulebased.method.GenerationMethod
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
+import com.cabrol.francois.mural.generator.rulebased.sequential.phrase.SequenceGenerator
 
-trait GenerationMethod{
+class RulesBased extends GenerationMethod{
 
-  def generateSequence(parameters : Parameters):List[Note]
+  def generateSequence(parameters : Parameters):List[Note] = {
+    SequenceGenerator.generateSequence(parameters)
+  }
 
 }

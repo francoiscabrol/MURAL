@@ -17,7 +17,7 @@
  *     along with MURAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.cabrol.francois.mural.generator.rulebased.sequential
+package com.cabrol.francois.mural.generator.rulebased
 
 /*
  * Copyright (c) 2013 François Cabrol.

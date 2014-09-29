@@ -17,10 +17,10 @@
  *     along with MURAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.cabrol.francois.mural.generator.rulebased.sequential
+package com.cabrol.francois.mural.generator.rulebased.method
 
 object Methods extends Enumeration {
-  val rulesBased = Method("com.cabrol.francois.mural.generator.rulebased.sequential.RulesBased")
+  val rulesBased = Method("com.cabrol.francois.mural.generator.rulebased.method.RulesBased")
   val keepingRhythm = Method("com.cabrol.francois.mural.generator.rulebased.sequential.KeepingRhythm")
 
   case class Method(name: String) extends super.Val(nextId, name) {

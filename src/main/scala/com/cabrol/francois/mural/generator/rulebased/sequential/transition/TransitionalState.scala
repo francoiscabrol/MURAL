@@ -17,7 +17,7 @@
  *     along with MURAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.cabrol.francois.mural.generator.rulebased.transition
+package com.cabrol.francois.mural.generator.rulebased.sequential.transition
 
 import com.cabrol.francois.libjamu.musictheory.entity.note.{Key, RhythmicNote, Note}
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote

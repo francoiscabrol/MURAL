@@ -23,7 +23,7 @@ import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveFactory
 import com.cabrol.francois.libjamu.musictheory.entity.note.{RhythmicNote, Note}
 import com.cabrol.francois.mural.tools.Debug
-import com.cabrol.francois.mural.generator.rulebased.transition.TransitionalState
+import com.cabrol.francois.mural.generator.rulebased.sequential.transition.TransitionalState
 import scala.collection.mutable.ListBuffer
 import scala.actors.Actor
 

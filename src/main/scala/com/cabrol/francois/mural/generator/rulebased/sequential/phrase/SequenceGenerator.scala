@@ -17,7 +17,7 @@
  *     along with MURAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.cabrol.francois.mural.generator.rulebased.sequential
+package com.cabrol.francois.mural.generator.rulebased.sequential.phrase
 
 import com.cabrol.francois.libjamu.musictheory.entity.note.Note
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
