@@ -22,12 +22,12 @@ package com.cabrol.francois.mural.generator.rulebased.method
 import com.cabrol.francois.libjamu.musictheory.entity.note.Note
 import com.cabrol.francois.mural.generator.rulebased.method.GenerationMethod
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
-import com.cabrol.francois.mural.generator.rulebased.sequential.phrase.SequenceGenerator
+import com.cabrol.francois.mural.generator.rulebased.sequential.phrase.SequenceOfNotesFactory
 
 class RulesBased extends GenerationMethod{
 
   def generateSequence(parameters : Parameters):List[Note] = {
-    SequenceGenerator.generateSequence(parameters)
+    SequenceOfNotesFactory.create(parameters)
   }
 
 }

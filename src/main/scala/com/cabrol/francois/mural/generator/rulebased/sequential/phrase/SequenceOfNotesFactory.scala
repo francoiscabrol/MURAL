@@ -25,28 +25,39 @@ import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
 
 /**
- * Created with IntelliJ IDEA.
- * User: francois
- * Date: 2013-11-14
- * Time: 13:39
- * To change this template use File | Settings | File Templates.
+ * Create a sequence of note
+ * @author  Francois Cabrol <francois.cabrol@live.fr>
+ * @since   2013-11-14
  */
-object SequenceGenerator {
+object SequenceOfNotesFactory {
 
-  def generateSequence(parameters : Parameters):List[Note] = {
-
-    def generatePhrase(sequence:List[Note], phrasesGenerator:List[PhraseGenerator], i:Int) : List[Note] = {
-      if(i >= phrasesGenerator.length)
+  private def generatePhrases(phraseGenerators:List[PhraseGenerator]):List[Note] = {
+    // FIXME: Replace the recurive algorithm by using a map callback
+    def generatePhrase(sequence:List[Note], phraseGenerators:List[PhraseGenerator], i:Int) : List[Note] = {
+      if(i >= phraseGenerators.length)
         sequence
       else
-        generatePhrase(sequence ::: phrasesGenerator(i).generateThePhrase, phrasesGenerator, i+1)
+        generatePhrase(sequence ::: phraseGenerators(i).generateThePhrase, phraseGenerators, i+1)
     }
+    generatePhrase(List[Note](), phraseGenerators, 0)
+  }
 
-    val p = sequenceOfPhraseGeneratorsFactory.create(parameters)
-    for(x <- p) Debug.sequenceGenerator(x.toString)
+  /**
+   * Generate a sequence of notes
+   * @param parameters
+   * @return the new random sequence of notes generated
+   */
+  def create(parameters : Parameters):List[Note] = {
 
+    // Create the sequence of PhraseGenerator objects
+    val phraseGenerators = sequenceOfPhraseGeneratorsFactory.create(parameters)
+
+    // print output
+    for(p <- phraseGenerators) Debug.sequenceGenerator(p.toString)
     Debug.sequenceGenerator("---- \n")
-    generatePhrase(List[Note](), p, 0)
+
+    // generate phrases from PhraseGenerator objects for building the new random sequence of notes and return it
+    generatePhrases(phraseGenerators)
   }
 
 }
