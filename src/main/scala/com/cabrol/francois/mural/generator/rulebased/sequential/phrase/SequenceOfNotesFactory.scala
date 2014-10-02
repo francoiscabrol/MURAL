@@ -32,14 +32,7 @@ import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
 object SequenceOfNotesFactory {
 
   private def generatePhrases(phraseGenerators:List[PhraseGenerator]):List[Note] = {
-    // FIXME: Replace the recurive algorithm by using a map callback
-    def generatePhrase(sequence:List[Note], phraseGenerators:List[PhraseGenerator], i:Int) : List[Note] = {
-      if(i >= phraseGenerators.length)
-        sequence
-      else
-        generatePhrase(sequence ::: phraseGenerators(i).generateThePhrase, phraseGenerators, i+1)
-    }
-    generatePhrase(List[Note](), phraseGenerators, 0)
+    phraseGenerators.map(p => {p.generateThePhrase}).flatten
   }
 
   /**
