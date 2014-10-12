@@ -43,8 +43,6 @@ import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 
 class Generator (val param:Parameters) {
 
-  //print(param.method)
-
   def generate : List[Note] = param.global.method.getObject.generateSequence(param)
 
 }

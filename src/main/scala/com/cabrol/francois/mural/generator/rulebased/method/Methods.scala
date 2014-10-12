@@ -20,8 +20,8 @@
 package com.cabrol.francois.mural.generator.rulebased.method
 
 object Methods extends Enumeration {
-  val rulesBased = Method("com.cabrol.francois.mural.generator.rulebased.method.RulesBased")
-  val keepingRhythm = Method("com.cabrol.francois.mural.generator.rulebased.sequential.KeepingRhythm")
+  val rulesBased = Method("com.cabrol.francois.mural.generator.rulebased.method.RuleBased")
+  // val keepingRhythm = Method("com.cabrol.francois.mural.generator.rulebased.method.KeepingRhythm")
 
   case class Method(name: String) extends super.Val(nextId, name) {
     def getObject : GenerationMethod = Class.forName(name).newInstance.asInstanceOf[GenerationMethod];

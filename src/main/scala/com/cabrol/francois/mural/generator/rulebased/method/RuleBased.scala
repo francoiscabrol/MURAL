@@ -17,19 +17,19 @@
  *     along with MURAL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.cabrol.francois.mural.generator.rulebased.sequential.phrase
+package com.cabrol.francois.mural.generator.rulebased.method
 
 import com.cabrol.francois.libjamu.musictheory.entity.note.Note
-import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
-import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
+import com.cabrol.francois.mural.generator.rulebased.sequential.phrase.{sequenceOfPhraseGeneratorsFactory, PhraseGenerator}
+import com.cabrol.francois.mural.tools.Debug
 
 /**
- * Create a sequence of note
+ * Create a sequence of note by a rule-based method
  * @author  Francois Cabrol <francois.cabrol@live.fr>
  * @since   2013-11-14
  */
-object SequenceOfNotesFactory {
+class RuleBased extends GenerationMethod{
 
   private def generatePhrases(phraseGenerators:List[PhraseGenerator]):List[Note] = {
     phraseGenerators.map(p => {p.generateThePhrase}).flatten
@@ -40,7 +40,7 @@ object SequenceOfNotesFactory {
    * @param parameters
    * @return the new random sequence of notes generated
    */
-  def create(parameters : Parameters):List[Note] = {
+  def generateSequence(parameters : Parameters):List[Note] = {
 
     // Create the sequence of PhraseGenerator objects
     val phraseGenerators = sequenceOfPhraseGeneratorsFactory.create(parameters)
