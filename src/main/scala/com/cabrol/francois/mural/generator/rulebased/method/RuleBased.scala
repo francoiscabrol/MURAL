@@ -31,9 +31,7 @@ import com.cabrol.francois.mural.tools.Debug
  */
 class RuleBased extends GenerationMethod{
 
-  private def generatePhrases(phraseGenerators:List[PhraseGenerator]):List[Note] = {
-    phraseGenerators.map(p => {p.generateThePhrase}).flatten
-  }
+  private def generatePhrases(phraseGenerators:List[PhraseGenerator]):List[Note] = phraseGenerators.map(p => {p.generateThePhrase}).flatten
 
   /**
    * Generate a sequence of notes

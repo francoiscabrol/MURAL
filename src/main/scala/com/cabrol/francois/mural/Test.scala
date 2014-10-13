@@ -36,13 +36,12 @@ object Test {
     val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.up, variance, density, 0, percentageOfNoteInChord)
     val dynamic:List[DynamicParameters] = List()
     val param = Parameters(global, dynamic, 1)
-    val generator = new Generator(param)
 
     var visuViews = mutable.MutableList[VisualiserView]()
 
     for(i <- 1 to 10){
       val beforeTime = System.currentTimeMillis()
-      val notes = generator.generate
+      val notes = Generator.generate(param)
       println("generation execution time:" + (System.currentTimeMillis() - beforeTime))
       visuViews.+=(MelodyVisualiserFactory.create(notes))
     }

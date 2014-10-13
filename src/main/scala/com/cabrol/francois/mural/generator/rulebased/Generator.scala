@@ -41,8 +41,17 @@ package com.cabrol.francois.mural.generator.rulebased
 import com.cabrol.francois.libjamu.musictheory.entity.note.Note
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 
-class Generator (val param:Parameters) {
+/**
+ * Contains the generator static methods
+ * @author  Francois Cabrol <francois.cabrol@live.fr>
+ */
+object Generator {
 
-  def generate : List[Note] = param.global.method.getObject.generateSequence(param)
+  /**
+   * Generate a new sequence of notes
+   * @param param is the generation parameters object
+   * @return the new sequence of notes
+   */
+  def generate(param:Parameters) : List[Note] = param.global.method.getObject.generateSequence(param)
 
 }
