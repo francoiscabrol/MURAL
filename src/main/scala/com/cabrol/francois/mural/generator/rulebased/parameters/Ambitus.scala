@@ -21,7 +21,12 @@ package com.cabrol.francois.mural.generator.rulebased.parameters
 
 import scala.collection.immutable.Range
 
-class Ambitus(start: Int, end: Int) extends Range(start, end+1, 1) {
-  require(start >= 0, "start must be >= 0")
-  require(end <= 127, "end must be <=127")
+/**
+ * The ambitus refer to the range of a voice, instrument, or piece generally
+ * @param lowest is the lowest note
+ * @param highest is the highest note
+ */
+class Ambitus(lowest: Int, highest: Int) extends Range(lowest, highest+1, 1) {
+  require(lowest >= 0, "lowest must be >= 0")
+  require(highest <= 127, "highest must be <=127")
 }
