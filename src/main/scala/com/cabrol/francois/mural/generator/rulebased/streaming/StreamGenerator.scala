@@ -20,7 +20,7 @@
 package com.cabrol.francois.mural.generator.rulebased.streaming
 
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
-import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveFactory
+import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveRandomizer
 import com.cabrol.francois.libjamu.musictheory.entity.note.{RhythmicNote, Note}
 import com.cabrol.francois.mural.tools.Debug
 import com.cabrol.francois.mural.generator.rulebased.sequential.transition.TransitionalState
@@ -39,7 +39,7 @@ object PlayerMessages extends Enumeration {
 
 class StreamGenerator(var param:Parameters) extends Actor {
 
-  val melodyCurveFactory:MelodyCurveFactory = new MelodyCurveFactory
+  val melodyCurveFactory:MelodyCurveRandomizer = new MelodyCurveRandomizer
   var currentTick:Int = 0;
   val indentTick = 8;
   var notesHistory:FixedList[Note] = new FixedList[Note](20);

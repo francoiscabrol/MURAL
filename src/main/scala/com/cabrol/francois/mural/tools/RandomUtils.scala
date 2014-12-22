@@ -32,11 +32,11 @@ object RandomUtils {
 
   val forceGaussian:Boolean = false
 
-  def randomIntBetween(min:Int, max:Int):Int = {
-    randomIntBetween(min, max, false)
+  def intBetween(min:Int, max:Int):Int = {
+    intBetween(min, max, false)
   }
 
-  def randomIntBetween(min:Int, max:Int, gaussian:Boolean):Int = {
+  def intBetween(min:Int, max:Int, gaussian:Boolean):Int = {
     val length = max - min
     val r = gaussian match {
       case true => Random.nextGaussian()
@@ -45,14 +45,14 @@ object RandomUtils {
     (min + r * length).toInt
   }
 
-  def randomFloatBetween(min:Float, max:Float):Float = {
+  def floatBetween(min:Float, max:Float):Float = {
     val length = max - min
     min + Random.nextFloat() * length
   }
 
   private def nextNumber:Float = if(forceGaussian) Random.nextGaussian().toFloat else Random.nextFloat()
 
-  def randomTrueOrFalse:Boolean = {
+  def trueOrFalse:Boolean = {
     Random.nextBoolean()
   }
 

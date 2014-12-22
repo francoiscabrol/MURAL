@@ -21,7 +21,7 @@ package com.cabrol.francois.mural.generator.rulebased.sequential.transition
 
 import com.cabrol.francois.libjamu.musictheory.entity.note.{Key, RhythmicNote, Note}
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
-import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveFactory
+import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveRandomizer
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 import com.cabrol.francois.mural.transition.PitchGenerator
 
@@ -31,9 +31,9 @@ class TransitionalState(param:Parameters,
                         scaleNotePredefined:Option[ScaleNote],
                         rhythmicNotePredefined:Option[RhythmicNote],
                         keyNotePredefined:Option[Key],
-                        melodyCurbFactory:MelodyCurveFactory) {
+                        melodyCurbFactory:MelodyCurveRandomizer) {
 
-  private def getNewRhythmicNote =  rhythmicNotePredefined match {
+  private def randRhythmicNote =  rhythmicNotePredefined match {
     case None => RhythmGenerator.generateRhythmicNote(param, previousNote, None)
     case Some(r) => r.getDuration match {
       case d if d <= 0 => RhythmGenerator.generateRhythmicNote(param, previousNote, Some(r.getStart))
@@ -41,14 +41,14 @@ class TransitionalState(param:Parameters,
     }
   }
 
-  private def getNewKey(r:RhythmicNote) = keyNotePredefined match {
-    case None => PitchGenerator.generateKey(r, param, scaleNotePredefined, previousNote, melodyCurbFactory)
+  private def randKey(r:RhythmicNote) = keyNotePredefined match {
+    case None => PitchGenerator.randomizeKey(r, param, scaleNotePredefined, previousNote, melodyCurbFactory)
     case Some(k) => k
   }
 
   def generateSingleNote:Note = {
-    val r = getNewRhythmicNote
-    val k = getNewKey(r)
+    val r = randRhythmicNote
+    val k = randKey(r)
     new Note(r, k)
   }
 

@@ -30,99 +30,29 @@ import com.cabrol.francois.mural.generator.rulebased.parameters.Direction
  * To change this template use File | Settings | File Templates.
  */
 
-/*
-case class MelodyCurb(val numBeats:Int, val samplingByBeat:Int){
-  val curb:List[Int] = generateNewCurb
-
-  lazy val samplingDynamicParametersInTotal = numBeats * samplingByBeat
-
-  def generateNewCurb:List[Int] = {
-    val probThatNextAddSameThanPrevious = RandomUtils.randomIntBetween(0, 100);
-    val probThatNextPointUpperThanPrevious = RandomUtils.randomIntBetween(0, 100);
-    val probThatNextPointSameThanPrevious = 10 //RandomUtils.randomIntBetween(0, 100);
-
-    def newAdd(previous:Option[Int]):Int = {
-      def randomPoint:Int = (RandomUtils.randomIntBetween(0,100, true)) match {
-        case x if x > probThatNextPointUpperThanPrevious => 1
-        case _ => -1
-      }
-      val add:Int = previous match {
-        case None => randomPoint
-        case Some(pre) => (RandomUtils.randomIntBetween(0,100, true)) match {
-          case x if x > probThatNextAddSameThanPrevious => pre
-          case _ => randomPoint
-        }
-      }
-      add
-    }
-    def addPoint(curb:List[Int], previousPoint:Option[Int], previousAdd:Option[Int]):List[Int] = {
-      def newPoint = {
-        val add = newAdd(previousAdd)
-        val p = curb.last + add
-        addPoint((curb ::: List(p)), Some(p), Some(add))
-      }
-
-      if(curb.length >= samplingDynamicParametersInTotal)
-        curb
-      else{
-        (RandomUtils.randomIntBetween(0,100)) match {
-          case x if x > probThatNextPointSameThanPrevious => newPoint
-          case _ => previousPoint match {
-            case Some(p) => addPoint((curb ::: List(p)), Some(p), previousAdd)
-            case _ => newPoint
-          }
-        }
-
-      }
-    }
-    addPoint(List[Int](0), None, None)
-  }
-
-  def getDirectionPitchForNextNote(pos:Float):Direction.Direction = {
-    Debug.curb(pos.toString)
-    val idPoint:Int = (pos*samplingByBeat).toInt
-    Debug.curb("id:" + idPoint)
-    val size = curb.size
-    val prePoint = curb(ListUtils.getIdOfAnInfiniteList(size, idPoint))
-    val postPoint = curb(ListUtils.getIdOfAnInfiniteList(size, idPoint+1))
-    val direction = (postPoint - prePoint) match {
-      case x if x > 0 => Direction.up
-      case x if x < 0 => Direction.down
-      case _ => Direction.both
-    }
-    Debug.curb("direction : " + direction)
-    direction
-
-  }
-
-}
-
-*/
-
-
 object MelodyCurbEnum extends Enumeration {
   type MelodyCurbEnum = Value
   val ascendant, descendant, brownien, random = Value
 
   def randomType:MelodyCurbEnum.MelodyCurbEnum = {
     val v = this.values
-    v.toSeq(RandomUtils.randomIntBetween(0, this.maxId))
+    v.toSeq(RandomUtils.intBetween(0, this.maxId))
   }
 
 }
 
-class MelodyCurveFactory{
+class MelodyCurveRandomizer{
 
-  lazy val probThatNextAddSameThanPrevious = RandomUtils.randomIntBetween(0, 100);
-  lazy val probThatNextPointUpperThanPrevious = RandomUtils.randomIntBetween(0, 100);
+  lazy val probThatNextAddSameThanPrevious = RandomUtils.intBetween(0, 100);
+  lazy val probThatNextPointUpperThanPrevious = RandomUtils.intBetween(0, 100);
   lazy val probThatNextPointSameThanPrevious = 10 //RandomUtils.randomIntBetween(0, 100);
 
   var curbType:MelodyCurbEnum.MelodyCurbEnum = MelodyCurbEnum.brownien
 
   def newDirection:Direction.Direction = {
 
-    def upOrDown = {
-      (RandomUtils.randomTrueOrFalse) match {
+    def randomlyUpOrDown = {
+      (RandomUtils.trueOrFalse) match {
         case true => Direction.up
         case false => Direction.down
       }
@@ -131,11 +61,11 @@ class MelodyCurveFactory{
     curbType match {
       case MelodyCurbEnum.ascendant => Direction.up
       case MelodyCurbEnum.descendant => Direction.down
-      case MelodyCurbEnum.brownien => upOrDown
+      case MelodyCurbEnum.brownien => randomlyUpOrDown
       case MelodyCurbEnum.random =>
-          (RandomUtils.randomIntBetween(0,100, true)) match {
+          (RandomUtils.intBetween(0,100, true)) match {
             case x if x > probThatNextAddSameThanPrevious => Direction.both
-            case _ => upOrDown
+            case _ => randomlyUpOrDown
           }
     }
   }

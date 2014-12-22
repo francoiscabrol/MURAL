@@ -65,7 +65,7 @@ object RhythmGenerator {
           case _ => density + variance
         }
 
-        RandomUtils.randomIntBetween(minDensity, maxDensity)
+        RandomUtils.intBetween(minDensity, maxDensity)
       }
       convertisorDensityToDuration(densityChoice)
     }

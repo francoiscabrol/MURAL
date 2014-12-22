@@ -22,7 +22,7 @@ package com.cabrol.francois.mural.generator.rulebased.sequential.phrase
 import com.cabrol.francois.libjamu.musictheory.entity.note.{Note, RhythmicNote}
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
-import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveFactory
+import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveRandomizer
 import com.cabrol.francois.mural.generator.rulebased.sequential.transition.TransitionalState
 import com.cabrol.francois.mural.tools.Debug
 
@@ -40,7 +40,7 @@ case class PhraseGenerator(val startingPoint:Float,
                            val endingNote:ScaleNote,
                            val param:Parameters) {
 
-  private val melodyCurveFactory:MelodyCurveFactory = new MelodyCurveFactory
+  private val melodyCurveFactory:MelodyCurveRandomizer = new MelodyCurveRandomizer
 
   /**
    * Get the position in the time of the last note

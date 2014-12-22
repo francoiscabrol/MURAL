@@ -20,7 +20,7 @@ object sequenceOfPhraseGeneratorsFactory {
   private def randomPhraseDuration(sequenceLength:Int, startingPoint:Float):Float = {
     // a round is done on maxDuration from the second decimal
     val maxDuration = BigDecimal((sequenceLength - startingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-    Math.round(RandomUtils.randomFloatBetween(1, maxDuration));
+    Math.round(RandomUtils.floatBetween(1, maxDuration));
   }
 
   /**
@@ -32,7 +32,7 @@ object sequenceOfPhraseGeneratorsFactory {
   private def randomGapDurationBetweenTwoPhrases(sequenceLength:Int, endingPoint:Float):Float = {
     // a round is done on maxDuration from the second decimal
     val maxDuration = BigDecimal((sequenceLength - endingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-    RandomUtils.randomFloatBetween(1, maxDuration)
+    RandomUtils.floatBetween(1, maxDuration)
   }
 
   /**

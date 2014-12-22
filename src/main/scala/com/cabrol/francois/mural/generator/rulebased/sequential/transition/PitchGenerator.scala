@@ -21,162 +21,223 @@ package com.cabrol.francois.mural.transition
 
 import com.cabrol.francois.libjamu.musictheory.entity.note.{RhythmicNote, Note, Key}
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
-import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveFactory
+import com.cabrol.francois.mural.generator.rulebased.sequential.MelodyCurveRandomizer
 import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
 import com.cabrol.francois.mural.generator.rulebased.parameters._
 import com.cabrol.francois.mural.generator.rulebased.parameters.HarmonicDefinition
-import scala.Some
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 
-/**
- * Created with IntelliJ IDEA.
- * User: francois
- * Date: 2013-11-10
- * Time: 17:39
- * To change this template use File | Settings | File Templates.
- */
 
-object GenerateOn extends Enumeration {
-  type GenerateOn = Value
+/**
+ * Enum that define the scope of the harmony (scale or chord)
+ */
+object HarmonicScope extends Enumeration {
+  type HarmonicScope = Value
   val scale, chord = Value
 }
 
+/**
+ * Constains every methods needed to choose a new key (ScaleNote + octave)
+ * @author  Francois Cabrol <francois.cabrol@live.fr>
+ * @since   2013-11-10
+ */
 object PitchGenerator {
 
-  private def defineWhereGenerateOn(percentageNoteInChord:Int, forceNoteInChord:Boolean):GenerateOn.GenerateOn = {
-    if ( forceNoteInChord == true || percentageNoteInChord > RandomUtils.randomIntBetween(0, 100) )
-      GenerateOn.chord
+  /**
+   * Choose an harmonic scope definition between both sets, chord's degrees and scale's degrees
+   * @param percentageNoteInChord
+   * @param forceNoteInChord
+   * @return Non-determinist harmonic scope
+   */
+  private def harmonicScope(percentageNoteInChord:Int, forceNoteInChord:Boolean):HarmonicScope.HarmonicScope = {
+    val r = RandomUtils.intBetween(0, 100)
+    if ( forceNoteInChord == true || percentageNoteInChord > r )
+      HarmonicScope.chord
     else
-      GenerateOn.scale
+      HarmonicScope.scale
   }
 
-  private def ramdomOctaveInAmbitus(ambitus:Ambitus):Int = {
-    val k:Int = RandomUtils.randomIntBetween(ambitus.min, ambitus.max)
+  /**
+   * Choose octave in the ambitus
+   * @param ambitus
+   * @return Non-deterministic octave number
+   */
+  private def octave(ambitus:Ambitus):Int = {
+    val k:Int = RandomUtils.intBetween(ambitus.min, ambitus.max)
     val key = new Key(k);
     key.getOctave();
   }
-  private def generateNextKeyNotFromPrevious(ambitus:Ambitus, harmony:HarmonicDefinition, generateOn:GenerateOn.GenerateOn):Key = {
-    Debug.pitchGenerator("The note depends on the previous one");
-    val oct = ramdomOctaveInAmbitus(ambitus)
-    val scaleNotesListUsed = generateOn match{
-      case GenerateOn.chord => harmony.chord
-      case GenerateOn.scale => harmony.scale
+
+  /**
+   * Choose a new octave
+   * @param nextScaleNote
+   * @return Non-deterministic octave number
+   */
+  private def octave(nextScaleNote: ScaleNote, previousNote:Note, direction: Direction.Direction):Int = {
+    //place the note on the good octave
+    val previousKeyOctave = previousNote.getKey.getOctave
+    val keyOctave = {
+      //si la note suivante est plus aigu que la note précédente sur la gamme
+      if (previousNote.getKey.getScaleNote.getPitch < nextScaleNote.getPitch){
+        direction match {
+          case Direction.up   => previousKeyOctave
+          case Direction.down => previousKeyOctave - 1
+          case Direction.both => previousKeyOctave
+        }
+      }
+      else{
+        direction match {
+          case Direction.up   => previousKeyOctave + 1
+          case Direction.down => previousKeyOctave
+          case Direction.both => previousKeyOctave
+        }
+      }
     }
-    Debug.pitchGenerator("The " + generateOn + " contains " + scaleNotesListUsed)
-    val sN:ScaleNote = scaleNotesListUsed.getScaleNote(RandomUtils.randomIntBetween(0, scaleNotesListUsed.getScaleNotes().size() - 1));
+    keyOctave
+  }
+
+  /**
+   * Choose a new scale note from current position
+   * @param currentPos
+   * @param adding
+   * @param harmony
+   * @return Non-deterministic scale note
+   */
+  private def randomizeScaleNote(currentPos:Int, adding:Int, harmony:HarmonicDefinition):ScaleNote = {
+    def randomScaleNote(currentPos:Int):ScaleNote = {
+      val newPos = currentPos + adding
+      val scaleNoteInMode = harmony.modeRelativeToChord.getScaleNote(newPos)
+      scaleNoteInMode match {
+        case _ if harmony.chord.isIn(scaleNoteInMode) => scaleNoteInMode
+        case _ => randomScaleNote(newPos)
+      }
+    }
+    randomScaleNote(currentPos)
+  }
+
+  /**
+   * Choose a new scale note
+   * @param previousNote
+   * @param harmony
+   * @param harmonicScope
+   * @param harmonicProgression
+   * @param direction
+   * @return Non-deterministic scale note
+   */
+  private def randomizeScaleNote(previousNote:Note, harmony:HarmonicDefinition, harmonicScope: HarmonicScope.HarmonicScope, harmonicProgression: HarmonicProgression, direction: Direction.Direction):ScaleNote = {
+
+    val relativePosition = direction match {
+      case Direction.up   => 1
+      case Direction.down => -1
+      case Direction.both => 0
+    }
+    val newPositionInMode = extractPreviousKeyPositionFromRootInMode(harmony, harmonicProgression, previousNote) + relativePosition
+    val scaleNoteInMode = harmony.modeRelativeToChord.getScaleNote(newPositionInMode)
+    Debug.pitchGenerator("Generate on " + harmonicScope + " containing " + harmony)
+    harmonicScope match{
+      case HarmonicScope.scale => scaleNoteInMode
+      case HarmonicScope.chord =>  (harmony.chord.isIn(scaleNoteInMode)) match {
+        case true => scaleNoteInMode
+        case false => direction match {
+          case Direction.up   => randomizeScaleNote(newPositionInMode, 1, harmony)
+          case Direction.down => randomizeScaleNote(newPositionInMode, -1, harmony)
+          case Direction.both => randomizeScaleNote(newPositionInMode, (if(RandomUtils.trueOrFalse) -1 else 1), harmony)
+        }
+      }
+    }
+  }
+
+  /**
+   * Choose a new key from constraints (the ambitus, the harmony definition and the harmonic scope)
+   * @param ambitus
+   * @param harmony The definition of the harmony (the chord, the scale and the relative mode)
+   * @param harmonicScope The harmonic scope (could be the scale or the chord)
+   * @return Non-deterministic key
+   */
+  private def keyFromConstraints(ambitus:Ambitus, harmony:HarmonicDefinition, harmonicScope:HarmonicScope.HarmonicScope):Key = {
+    Debug.pitchGenerator("The next note depends on contraints only")
+    val oct = octave(ambitus)
+    val scaleNotesListUsed = harmonicScope match {
+      case HarmonicScope.chord => harmony.chord
+      case HarmonicScope.scale => harmony.scale
+    }
+    Debug.pitchGenerator("The " + harmonicScope + " contains " + scaleNotesListUsed)
+    val sN:ScaleNote = scaleNotesListUsed.getScaleNote(RandomUtils.intBetween(0, scaleNotesListUsed.getScaleNotes().size() - 1));
     sN.getKey(oct)
   }
 
-  private def generateNewPitchFromScaleNoteDefined(scaleNotePredefined:ScaleNote, ambitus:Ambitus):Key = {
-    Debug.pitchGenerator("The scale note is determined " + scaleNotePredefined)
-    val oct = ramdomOctaveInAmbitus(ambitus)
+  /**
+   * Choose a new key from the scale note
+   * @param scaleNotePredefined
+   * @param ambitus
+   * @return Non-deterministic key
+   */
+  private def keyFromScaleNote(scaleNotePredefined:ScaleNote, ambitus:Ambitus):Key = {
+    Debug.pitchGenerator("The scale note is determined :" + scaleNotePredefined)
+    val oct = octave(ambitus)
     scaleNotePredefined.getKey(oct)
   }
 
-  private def generateNextKeyFromPrevious(previousNote:Note, ambitus:Ambitus, direction: Direction.Direction, generateOn:GenerateOn.GenerateOn, harmony:HarmonicDefinition, harmonicProgression:HarmonicProgression):Key = {
+  /**
+   * Choose a new key from the previous one
+   * @param previousNote
+   * @param ambitus
+   * @param harmonicScope
+   * @param harmony
+   * @param harmonicProgression
+   * @return Non-deterministic key
+   */
+  private def keyFromPreviousOne(previousNote:Note, ambitus:Ambitus, melodyCurbFactory: MelodyCurveRandomizer, harmonicScope:HarmonicScope.HarmonicScope, harmony:HarmonicDefinition, harmonicProgression:HarmonicProgression):Key = {
 
-    Debug.pitchGenerator("Is from previous " + previousNote)
+    Debug.pitchGenerator("The next note is comming from previous " + previousNote)
 
-    def previousKeyPositionFromRootInMode:Int = {
-      val previousHarmony = harmonicProgression.getHarmonyForTheTimePosition(previousNote.getRhythmicNote.getStart)
-      previousHarmony.modeRelativeToChord.getNotePosition(previousNote.getKey.getScaleNote)
-    }
-
-    def nextNoteKey(direction:Direction.Direction):Key = {
-
-      val nextScaleNote:ScaleNote = {
-
-        def newScaleNoteThatMatchWithChord(currentPos:Int, adding:Int):ScaleNote = {
-          def tryNewPos(currentPos:Int):ScaleNote = {
-            val newPos = currentPos + adding
-            val scaleNoteInMode = harmony.modeRelativeToChord.getScaleNote(newPos)
-            scaleNoteInMode match {
-              case _ if harmony.chord.isIn(scaleNoteInMode) => scaleNoteInMode
-              case _ => tryNewPos(newPos)
-            }
-          }
-          tryNewPos(currentPos)
-        }
-
-        val addingPositionRelative = direction match {
-          case Direction.up => 1
-          case Direction.down => -1
-          case Direction.both => 0
-        }
-        val newPositionInMode = previousKeyPositionFromRootInMode + addingPositionRelative
-        val scaleNoteInMode = harmony.modeRelativeToChord.getScaleNote(newPositionInMode)
-        Debug.pitchGenerator("Generate on " + generateOn + " containing " + harmony)
-        generateOn match{
-          case GenerateOn.scale => scaleNoteInMode
-          case GenerateOn.chord =>  (harmony.chord.isIn(scaleNoteInMode)) match {
-            case true => scaleNoteInMode
-            case false => direction match {
-              case Direction.up => newScaleNoteThatMatchWithChord(newPositionInMode, 1)
-              case Direction.down => newScaleNoteThatMatchWithChord(newPositionInMode, -1)
-              case Direction.both => newScaleNoteThatMatchWithChord(newPositionInMode, (if(RandomUtils.randomTrueOrFalse) -1 else 1))
-            }
-          }
-        }
-      }
-
-
-      val nextKeyOctave:Int = {
-        //place the note on the good octave
-        val previousKeyOctave = previousNote.getKey.getOctave
-        val keyOctave = {
-          //si la note suivante est plus aigu que la note précédente sur la gamme
-          if (previousNote.getKey.getScaleNote.getPitch < nextScaleNote.getPitch){
-            direction match {
-              case Direction.up => previousKeyOctave
-              case Direction.down => previousKeyOctave - 1
-              case Direction.both => previousKeyOctave
-            }
-          }
-          else{
-            direction match {
-              case Direction.up => previousKeyOctave + 1
-              case Direction.down => previousKeyOctave
-              case Direction.both => previousKeyOctave
-            }
-          }
-        }
-        keyOctave
-      }
-      nextScaleNote.getKey(nextKeyOctave)
-    }
-
-    def nextKeyRespectConstraint:Key = {
-      val k = nextNoteKey(direction)
-      ambitus.contains(k.getMidiKey) match {
-        case true => k
-        case false => { Debug.pitchGenerator("The key " + k + " is not in the ambitus so it's going to be changed." ); generateNextKeyNotFromPrevious(ambitus, harmony, generateOn) }
-        //            case false => nextNoteKey(direction match {
-        //              case Direction.up => Direction.down
-        //              case Direction.down => Direction.up
-        //            })
-      }
-    }
-
-    nextKeyRespectConstraint
-  }
-
-  def generateKey(rhythmicNote:RhythmicNote, param:Parameters, scaleNotePredefined:Option[ScaleNote], previousNote:Option[Note], melodyCurbFactory:MelodyCurveFactory, forceNoteInChord:Boolean = false):Key = {
-
-    val dynamicParameters = param.getDynamic(rhythmicNote.getStart)
-    //val currentBar = getCurrentBar(rhythmicNote.getStart)
-    val harmony:HarmonicDefinition = param.global.harmonicProgression.getHarmonyForTheTimePosition(rhythmicNote.getStart)
-    val generateOn:GenerateOn.GenerateOn = defineWhereGenerateOn(dynamicParameters.percentageNotesInChords, forceNoteInChord)
     val direction: Direction.Direction = melodyCurbFactory.newDirection
 
     Debug.pitchGenerator("Direction is " + direction + " and direction method is " + melodyCurbFactory.curbType)
 
+    val scaleNote = randomizeScaleNote(previousNote, harmony, harmonicScope, harmonicProgression, direction)
+    scaleNote.getKey(octave(scaleNote, previousNote, direction))
+  }
+
+  private def extractPreviousKeyPositionFromRootInMode(harmonicDefinition: HarmonicDefinition, harmonicProgression: HarmonicProgression, previousNote:Note):Int = {
+    val previousHarmony = harmonicProgression.getHarmonyForTheTimePosition(previousNote.getRhythmicNote.getStart)
+    previousHarmony.modeRelativeToChord.getNotePosition(previousNote.getKey.getScaleNote)
+  }
+
+  private def isRespectingConstraints(key: Key, ambitus: Ambitus) = {
+
+    def isInAmbitus:Boolean = {
+      ambitus.contains(key.getMidiKey)
+    }
+
+    isInAmbitus
+  }
+
+  /**
+   *
+   * @param rhythmicNote
+   * @param param
+   * @param scaleNotePredefined
+   * @param previousNote
+   * @param melodyCurbFactory
+   * @param forceNoteInChord
+   * @return Non-deterministic key
+   */
+  def randomizeKey(rhythmicNote:RhythmicNote, param:Parameters, scaleNotePredefined:Option[ScaleNote], previousNote:Option[Note], melodyCurbFactory:MelodyCurveRandomizer, forceNoteInChord:Boolean = false):Key = {
+
+    val dynamicParameters = param.getDynamic(rhythmicNote.getStart)
+    val harmony:HarmonicDefinition = param.global.harmonicProgression.getHarmonyForTheTimePosition(rhythmicNote.getStart)
+    val scope:HarmonicScope.HarmonicScope = harmonicScope(dynamicParameters.percentageNotesInChords, forceNoteInChord)
+
     val key: Key = {
       scaleNotePredefined match {
-        case None => previousNote match {
-          case None => generateNextKeyNotFromPrevious(param.global.ambitus, harmony, generateOn)
-          case Some(pN) => generateNextKeyFromPrevious(pN, param.global.ambitus, direction, generateOn, harmony, param.global.harmonicProgression)
+        case None => {
+          previousNote match {
+            case None            => keyFromConstraints(param.global.ambitus, harmony, scope)
+            case Some(scaleNote) => keyFromPreviousOne(scaleNote, param.global.ambitus, melodyCurbFactory, scope, harmony, param.global.harmonicProgression)
+          }
         }
-        case Some(sNP) => generateNewPitchFromScaleNoteDefined(sNP, param.global.ambitus)
+        case Some(sNP) => keyFromScaleNote(sNP, param.global.ambitus)
       }
 
     }

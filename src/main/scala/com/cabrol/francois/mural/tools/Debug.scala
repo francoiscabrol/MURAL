@@ -28,28 +28,27 @@ package com.cabrol.francois.mural.tools
  */
 object Debug {
 
-  val transitionalState=true
-  val phraseGenerator=true
-  val sequenceGenerator=true
-  val pitchGenerator=true
-  val curve=false
-  val streamGenerator=false
+  val transitionalState =true
+  val phraseGenerator   =true
+  val sequenceGenerator =true
+  val pitchGenerator    =true
+  val curve             =false
+  val streamGenerator   =false
 
-  def streamGenerator(msg:String):Unit = if(streamGenerator) println("[STREAM_GENERATOR] " + msg)
+  def streamGenerator(msg:String):Unit   = if(streamGenerator)   println("[STREAM_GENERATOR] "   + msg)
   
   def transitionalState(msg:String):Unit = if(transitionalState) println("[TRANSITIONAL_STATE] " + msg)
 
   def sequenceGenerator(msg:String):Unit = if(sequenceGenerator) println("[SEQUENCE_GENERATOR] " + msg)
 
-  def pitchGenerator(msg:String):Unit = if(pitchGenerator) println("[PITCH_GENERATOR] " + msg)
+  def pitchGenerator(msg:String):Unit    = if(pitchGenerator)    println("[PITCH_GENERATOR] "    + msg)
 
-  def phraseGenerator(msg:String):Unit = if(phraseGenerator) println("[PHRASE_GENERATOR] " + msg)
+  def phraseGenerator(msg:String):Unit   = if(phraseGenerator)   println("[PHRASE_GENERATOR] "   + msg)
 
-  def curve(msg:String):Unit = if(curve) println("[CURB] " + msg)
+  def curve(msg:String):Unit             = if(curve)             println("[CURB] "               + msg)
 
-  private def setColor(s:String):String = s match {
+  private def setColor(s:String):String  = s match {
     case "blue" => Console.BLUE
   }
-
 
 }
