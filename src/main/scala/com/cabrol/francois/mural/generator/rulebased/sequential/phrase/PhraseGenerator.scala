@@ -96,7 +96,8 @@ case class PhraseGenerator(val startingPoint:Float,
       if( getLastNotePos(notes) >= param.global.sequenceLenght || getLastNotePos(notes) >= endingPoint){
         // if the last note in positioned after the end of the phrase or after the end of all the sequence
         // delete the last one and generate a new one with the good method to ending the phrase
-        notes.drop(-1) ::: List(generateLastNote(notes.last))
+        val n = notes.drop(-1)
+        n ::: List(generateLastNote(n.last))
       }
       else
         addNewNote(notes ::: List(generateNewNote(notes.last)))

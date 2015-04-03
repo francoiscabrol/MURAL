@@ -40,6 +40,8 @@ object MuralBuild extends Build {
       Seq("org.scala-lang" % "scala-actors" % v)
     ),
 
+    libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.2" % "test",
+
     javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint"),
 
     initialize := {
@@ -47,12 +49,11 @@ object MuralBuild extends Build {
       if (sys.props("java.specification.version") != "1.8")
         sys.error("Java 8 is required for this project.")
     },
-    
+
     unmanagedJars in Compile += Attributed.blank(file(System.getenv("JAVA_HOME") + "/jre/lib/ext/jfxrt.jar")),
 
     connectInput in run := true,
 
     fork in run := true
-
   )
 }
