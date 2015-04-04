@@ -34,7 +34,10 @@ case class HarmonicDefinition(chord:Chord, scale:Scale){
 class HarmonicProgression(val chords:Map[Float, HarmonicDefinition]) {
 
     def getHarmonyForTheTimePosition(pos:Float):HarmonicDefinition = {
-      val d = chords.filter(k => k._1 <= pos)
+      val relativePosition = Math.floorMod(Math.floor(pos).toInt, chords.size)
+      val d = chords.filter(k => {
+        k._1 <= relativePosition
+      })
       d.last._2
     }
 }

@@ -36,7 +36,6 @@ class Inspector(params:Parameters) {
 
     // Test notes are in the harmony progression or scale
     val harmony:HarmonicDefinition = params.global.harmonicProgression.getHarmonyForTheTimePosition(note.getRhythmicNote.getStart)
-    println(harmony)
     if (!harmony.scale.isIn(note.getKey.getScaleNote))
       return failed(note.getKey.getScaleNote + " is not in the scale " + harmony.scale)
     

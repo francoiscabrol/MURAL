@@ -8,6 +8,7 @@ import com.cabrol.francois.melvi.view.VisualiserView
 import com.cabrol.francois.mural.generator.rulebased.Generator
 import com.cabrol.francois.mural.generator.rulebased.method.Methods
 import com.cabrol.francois.mural.generator.rulebased.parameters.{HarmonicDefinition, _}
+import com.cabrol.francois.mural.tools.Inspector
 
 import scala.collection.mutable
 
@@ -30,8 +31,6 @@ object Test {
     val pSilence = 0
     val percentageOfNoteInChord = 50
     val numOfNoteAtTheSameTimeUnit = 1
-    //val melodyCurb = MelodyCurb(numBeatsPerBar*numBars, 4)
-    //println(melodyCurb.curb)
     val density = 1
     val variance = 0
     val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.up, variance, density, 0, percentageOfNoteInChord)
@@ -40,11 +39,17 @@ object Test {
 
     var visuViews = mutable.MutableList[VisualiserView]()
 
+    var inpector = new Inspector(param)
+    
     for (i <- 1 to 10) {
       val beforeTime = System.currentTimeMillis()
       val notes = Generator.generate(param)
 
       println("generation execution time:" + (System.currentTimeMillis() - beforeTime))
+
+      val (success, error) = inpector.inspect(notes)
+      if (!success)
+        throw new Error(error.get)
 
       visuViews.+=(MelodyVisualiserFactory.create(notes))
     }
