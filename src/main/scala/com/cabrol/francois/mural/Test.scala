@@ -47,9 +47,7 @@ object Test {
 
       println("generation execution time:" + (System.currentTimeMillis() - beforeTime))
 
-      val (success, error) = inpector.inspect(notes)
-      if (!success)
-        throw new Error(error.get)
+      inpector.inspect(notes)
 
       visuViews.+=(MelodyVisualiserFactory.create(notes))
     }

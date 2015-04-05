@@ -10,26 +10,22 @@ import com.cabrol.francois.mural.generator.rulebased.parameters.{HarmonicDefinit
  */
 class Inspector(params:Parameters) {
 
-  def inspect(sequence:List[Note]):(Boolean, Option[String]) = {
+  case class InspectionException(message: String) extends Exception("[INSPECTION ERROR] " + message)
+  
+  def inspect(sequence:List[Note]):Boolean = {
 
     sequence.foreach(n => {
-      
-      val (success, error) = inspectNoteHarmony(n)
-      if (!success)
-        failed(error.get)
-      
-      val (success2, error2) = inspectRhythmicNote(n)
-      if (!success2)
-        failed(error2.get)
+      inspectNoteHarmony(n)
+      inspectRhythmicNote(n)
     })
     
-    success()
+    true
   }
   
-  def inspectNoteHarmony(note:Note): (Boolean, Option[String]) = {
+  def inspectNoteHarmony(note:Note):Boolean = {
     // Test ambitus
     if (!params.global.ambitus.contains(note.getKey.getMidiKey())) {
-      return failed("Out of ambitus")
+      throw InspectionException(note + " is out of ambitus " + params.global.ambitus)
     }
 
     // Test percentage of notes in chord
@@ -37,22 +33,15 @@ class Inspector(params:Parameters) {
     // Test notes are in the harmony progression or scale
     val harmony:HarmonicDefinition = params.global.harmonicProgression.getHarmonyForTheTimePosition(note.getRhythmicNote.getStart)
     if (!harmony.scale.isIn(note.getKey.getScaleNote))
-      return failed(note.getKey.getScaleNote + " is not in the scale " + harmony.scale)
-    
-    success()
-  }
-  
-  def inspectRhythmicNote(note:Note): (Boolean, Option[String]) = {
+      throw InspectionException(note.getKey.getScaleNote + " is not in the scale " + harmony.scale)
 
-    success()
+    true
   }
   
-  private def failed(error:String):(Boolean, Option[String]) = {
-    (false, Some(error))
+  def inspectRhythmicNote(note:Note):Boolean = {
+
+    true
   }
   
-  private def success():(Boolean, Option[String]) = {
-    (true, None)
-  }
-  
+
 }

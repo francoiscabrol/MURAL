@@ -156,14 +156,19 @@ object PitchGenerator {
    */
   private def keyFromConstraints(ambitus:Ambitus, harmony:HarmonicDefinition, harmonicScope:HarmonicScope.HarmonicScope):Key = {
     Debug.pitchGenerator("The next note depends on contraints only")
-    val oct = octave(ambitus)
-    val scaleNotesListUsed = harmonicScope match {
+    //val oct = octave(ambitus)
+    val scaleNotesAvailable = harmonicScope match {
       case HarmonicScope.chord => harmony.chord
       case HarmonicScope.scale => harmony.scale
     }
-    Debug.pitchGenerator("The " + harmonicScope + " contains " + scaleNotesListUsed)
-    val sN:ScaleNote = scaleNotesListUsed.getScaleNote(RandomUtils.intBetween(0, scaleNotesListUsed.getScaleNotes().size() - 1));
-    sN.getKey(oct)
+    Debug.pitchGenerator("The " + harmonicScope + " contains " + scaleNotesAvailable)
+    
+    // List all pitches available
+    val pitchesAvailable = ambitus.filter(pitch => scaleNotesAvailable.isIn(new ScaleNote(pitch)))
+    
+    // Return a random key
+    val index = RandomUtils.intBetween(0, pitchesAvailable.size - 1)
+    new Key(pitchesAvailable.apply(index))
   }
 
   /**
@@ -202,15 +207,6 @@ object PitchGenerator {
   private def extractPreviousKeyPositionFromRootInMode(harmonicDefinition: HarmonicDefinition, harmonicProgression: HarmonicProgression, previousNote:Note):Int = {
     val previousHarmony = harmonicProgression.getHarmonyForTheTimePosition(previousNote.getRhythmicNote.getStart)
     previousHarmony.modeRelativeToChord.getNotePosition(previousNote.getKey.getScaleNote)
-  }
-
-  private def isRespectingConstraints(key: Key, ambitus: Ambitus) = {
-
-    def isInAmbitus:Boolean = {
-      ambitus.contains(key.getMidiKey)
-    }
-
-    isInAmbitus
   }
 
   /**

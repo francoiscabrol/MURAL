@@ -31,25 +31,27 @@ class SetSpec extends FunSpec with BeforeAndAfter with Matchers {
   describe("inspectNoteHarmony"){
     it("should failed if the note is out the ambitus") {
       val note = new Note(new RhythmicNote(0, 1), new Key(72))
-      val (success, error) = inspector.inspectNoteHarmony(note)
-      assert(!success)
-      error.get should include regex "ambitus"
+      a [Exception] should be thrownBy {
+        inspector.inspectNoteHarmony(note)
+      }
+      //error.get should include regex "ambitus"
     }
     it("should succeed if the note is in the ambitus") {
       val note = new Note(new RhythmicNote(0, 1), new Key(60))
-      val (success, error) = inspector.inspectNoteHarmony(note)
+      val success = inspector.inspectNoteHarmony(note)
       assert(success)
     }
     it ("should succeed if the note is in the harmony") {
       val note = new Note(new RhythmicNote(0, 1), new Key(64)) //E
-      val (success, error) = inspector.inspectNoteHarmony(note)
+      val success = inspector.inspectNoteHarmony(note)
       assert(success)
     }
     it ("should failed if the note is not in the harmony") {
       val note = new Note(new RhythmicNote(0, 1), new Key(66)) //E
-      val (success, error) = inspector.inspectNoteHarmony(note)
-      assert(!success)
-      error.get should include regex "not in the scale"
+      a [Exception] should be thrownBy {
+        inspector.inspectNoteHarmony(note)
+      }
+      //error.get should include regex "not in the scale"
     }
   }
 }

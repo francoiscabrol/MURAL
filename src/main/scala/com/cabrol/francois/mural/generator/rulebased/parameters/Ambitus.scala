@@ -29,4 +29,6 @@ import scala.collection.immutable.Range
 class Ambitus(lowest: Int, highest: Int) extends Range(lowest, highest+1, 1) {
   require(lowest >= 0, "lowest must be >= 0")
   require(highest <= 127, "highest must be <=127")
+
+  override def toString(): String = "Ambitus("+lowest+", "+highest+")"
 }
