@@ -52,8 +52,4 @@ class TransitionalState(param:Parameters,
     new Note(r, k)
   }
 
-  def generateChord:List[Note] = {
-    List()
-  }
-
 }

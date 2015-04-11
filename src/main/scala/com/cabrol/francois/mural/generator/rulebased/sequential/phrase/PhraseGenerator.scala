@@ -55,7 +55,7 @@ case class PhraseGenerator(val startingPoint:Float,
    */
   private def generateFirstNote:Note = {
     Debug.phraseGenerator("Generating the first note...")
-    new TransitionalState(param, None, Some(startingNote), Some(new RhythmicNote(startingPoint, 0)), None, melodyCurveFactory).generateSingleNote
+    new TransitionalState(param, None, None, Some(new RhythmicNote(startingPoint, 0)), None, melodyCurveFactory).generateSingleNote
   }
 
   /**
