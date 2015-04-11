@@ -3,7 +3,7 @@ package main.scala.com.cabrol.francois.mural
 import java.awt.{Point, Toolkit}
 
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.{Chord, Scale}
-import com.cabrol.francois.melvi.factory.MelodyVisualiserFactory
+import com.cabrol.francois.melvi.factory.{GraphicsType, MelodyVisualiserFactory}
 import com.cabrol.francois.melvi.view.VisualiserView
 import com.cabrol.francois.mural.generator.rulebased.Generator
 import com.cabrol.francois.mural.generator.rulebased.method.Methods
@@ -31,7 +31,7 @@ object Test {
     val pSilence = 0
     val percentageOfNoteInChord = 50
     val numOfNoteAtTheSameTimeUnit = 1
-    val density = 3
+    val density = 6
     val variance = 0
     val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.up, variance, density, 0, percentageOfNoteInChord)
     val dynamic: List[DynamicParameters] = List()
@@ -49,7 +49,7 @@ object Test {
 
       inpector.inspect(notes)
 
-      visuViews.+=(MelodyVisualiserFactory.create(notes))
+      visuViews.+=(MelodyVisualiserFactory.create(notes, GraphicsType.pitchvstime))
     }
 
     def getVisuPos(index: Int): Point = {

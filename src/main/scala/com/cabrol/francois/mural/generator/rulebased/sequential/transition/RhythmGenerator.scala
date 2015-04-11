@@ -40,13 +40,14 @@ object RhythmGenerator {
 
       def convertisorDensityToDuration(density:Int):Float = {
         val densityToDuration:List[Float] = List(0.25f, 0.5f, 0.75f, 1, 1.5f, 2, 4)
+        val reverted = densityToDuration.reverse
 
         if(density < 0)
           densityToDuration.head
         else if(density > densityToDuration.length-1)
           densityToDuration.last;
 
-        densityToDuration(density);
+        reverted(density);
       }
 
       val densityChoice:Int = {
