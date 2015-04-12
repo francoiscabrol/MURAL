@@ -30,27 +30,25 @@ import scala.util.Random
  */
 object RandomUtils {
 
-  val forceGaussian:Boolean = false
-
   def intBetween(min:Int, max:Int):Int = {
-    intBetween(min, max, false)
-  }
-
-  def intBetween(min:Int, max:Int, gaussian:Boolean):Int = {
-    val length = max - min
-    val r = gaussian match {
-      case true => Random.nextGaussian()
-      case false => nextNumber
-    }
-    (min + r * length).toInt
+    floatBetween(min, max).toInt
   }
 
   def floatBetween(min:Float, max:Float):Float = {
     val length = max - min
     min + Random.nextFloat() * length
   }
+  
+  def exponentialDistribution(rate:Double=0.8):Double = {
+    val u = Random.nextFloat()
+    (math.log(1-u)/(- rate))
+  }
 
-  private def nextNumber:Float = if(forceGaussian) Random.nextGaussian().toFloat else Random.nextFloat()
+  def exponentialDistributionBetween(min:Float, max:Float, rate:Double=0.8):Double = {
+    val rand = exponentialDistribution(rate)
+    val length = max - min
+    min + rand * length
+  }
 
   def trueOrFalse:Boolean = {
     Random.nextBoolean()

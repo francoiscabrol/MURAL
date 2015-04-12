@@ -44,10 +44,8 @@ object MelodyCurbEnum extends Enumeration {
 class MelodyCurveRandomizer{
 
   lazy val probThatNextAddSameThanPrevious = RandomUtils.intBetween(0, 100);
-  lazy val probThatNextPointUpperThanPrevious = RandomUtils.intBetween(0, 100);
-  lazy val probThatNextPointSameThanPrevious = 10 //RandomUtils.randomIntBetween(0, 100);
 
-  var curbType:MelodyCurbEnum.MelodyCurbEnum = MelodyCurbEnum.brownien
+  var curbType:MelodyCurbEnum.MelodyCurbEnum = MelodyCurbEnum.randomType
 
   def newDirection:Direction.Direction = {
 
@@ -63,7 +61,7 @@ class MelodyCurveRandomizer{
       case MelodyCurbEnum.descendant => Direction.down
       case MelodyCurbEnum.brownien => randomlyUpOrDown
       case MelodyCurbEnum.random =>
-          (RandomUtils.intBetween(0,100, true)) match {
+          (RandomUtils.intBetween(0,100)) match {
             case x if x > probThatNextAddSameThanPrevious => Direction.both
             case _ => randomlyUpOrDown
           }
