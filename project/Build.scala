@@ -20,9 +20,10 @@ object MuralBuild extends Build {
     id = PROJECT_NAME,
     base = file("."),
     settings = muralSettings
-  ).dependsOn(melvi)
+  ).dependsOn(libjamu, melvi)
 
   lazy val melvi = uri("git://github.com/francoiscabrol/MelVi")
+  lazy val libjamu = uri("git://github.com/francoiscabrol/libjamu")
 
 
   //////////////////////////////////////////////////////////////////////////////
