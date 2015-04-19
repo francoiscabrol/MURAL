@@ -19,6 +19,9 @@
 
 package com.cabrol.francois.mural.tools
 
+import scala.io.Codec
+import scala.reflect.io.File
+
 /**
  * Created with IntelliJ IDEA.
  * User: francois
@@ -28,10 +31,10 @@ package com.cabrol.francois.mural.tools
  */
 object Debug {
 
-  val transitionalState =true
+  val transitionalState =false
   val phraseGenerator   =true
-  val sequenceGenerator =true
-  val pitchGenerator    =true
+  val sequenceGenerator =false
+  val pitchGenerator    =false
   val curve             =false
   val streamGenerator   =false
 
@@ -46,6 +49,12 @@ object Debug {
   def phraseGenerator(msg:String):Unit   = if(phraseGenerator)   println("[PHRASE_GENERATOR] "   + msg)
 
   def curve(msg:String):Unit             = if(curve)             println("[CURB] "               + msg)
+  
+  def log(filename:String, log:AnyVal) = {
+    val output = File(filename + ".txt").writer(true, Codec.UTF8)
+    output.append(log + " ")
+    output.close
+  }
 
   private def setColor(s:String):String  = s match {
     case "blue" => Console.BLUE

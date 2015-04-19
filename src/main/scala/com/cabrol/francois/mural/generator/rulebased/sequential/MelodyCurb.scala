@@ -36,14 +36,15 @@ object MelodyCurbEnum extends Enumeration {
 
   def randomType:MelodyCurbEnum.MelodyCurbEnum = {
     val v = this.values
-    v.toSeq(RandomUtils.intBetween(0, this.maxId))
+    val s = v.toSeq(RandomUtils.intBetween(0, this.maxId))
+    s
   }
 
 }
 
 class MelodyCurveRandomizer{
 
-  lazy val probThatNextAddSameThanPrevious = RandomUtils.intBetween(0, 100);
+  def probThatNextAddSameThanPrevious = RandomUtils.intBetween(0, 100);
 
   var curbType:MelodyCurbEnum.MelodyCurbEnum = MelodyCurbEnum.randomType
 

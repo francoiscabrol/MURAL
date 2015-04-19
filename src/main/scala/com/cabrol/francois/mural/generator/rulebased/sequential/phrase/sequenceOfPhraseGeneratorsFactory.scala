@@ -2,7 +2,7 @@ package com.cabrol.francois.mural.generator.rulebased.sequential.phrase
 
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
-import com.cabrol.francois.mural.tools.RandomUtils
+import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
 
 /**
  * Create a sequence of PhraseGenerator objects which ones will allow to generate each phrases of the sequence
@@ -20,7 +20,9 @@ object sequenceOfPhraseGeneratorsFactory {
   private def randomPhraseDuration(sequenceLength:Int, startingPoint:Float):Float = {
     // a round is done on maxDuration from the second decimal
     val maxDuration = BigDecimal((sequenceLength - startingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-    Math.round(RandomUtils.floatBetween(1, maxDuration));
+    val r = Math.round(RandomUtils.exponentialDistributionBetween(0, maxDuration, 0.5));
+    Debug.log("phrase-duration", r)
+    r
   }
 
   /**
@@ -32,7 +34,7 @@ object sequenceOfPhraseGeneratorsFactory {
   private def randomGapDurationBetweenTwoPhrases(sequenceLength:Int, endingPoint:Float):Float = {
     // a round is done on maxDuration from the second decimal
     val maxDuration = BigDecimal((sequenceLength - endingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-    RandomUtils.exponentialDistributionBetween(0, 1).toFloat
+    RandomUtils.exponentialDistributionBetween(0, 1, 0.99).toFloat
   }
 
   /**

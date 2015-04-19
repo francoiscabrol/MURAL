@@ -26,7 +26,7 @@ object Test {
     val hP = new HarmonicProgression(chords)
     val generationMethod = Methods.rulesBased
     val numBeatsPerBar = 4
-    val numBars = 4
+    val numBars = 16
     val ambitus: Ambitus = new Ambitus(50, 71)
     val pSilence = 0
     val percentageOfNoteInChord = 50
@@ -41,7 +41,7 @@ object Test {
 
     var inpector = new Inspector(param)
     
-    for (i <- 1 to 10) {
+    for (i <- 1 to 4) {
       val beforeTime = System.currentTimeMillis()
       val notes = Generator.generate(param)
 
