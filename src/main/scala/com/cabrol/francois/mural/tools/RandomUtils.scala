@@ -41,7 +41,7 @@ object RandomUtils {
   
   def exponentialDistribution(rate:Double=0.8):Double = {
     val u = Random.nextFloat()
-    (math.log(1-u)/(- rate))
+    math.exp(-4 * u)
   }
 
   def exponentialDistributionBetween(min:Float, max:Float, rate:Double=0.8):Double = {

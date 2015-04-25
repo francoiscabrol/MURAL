@@ -2,7 +2,7 @@ package com.cabrol.francois.mural.generator.rulebased.sequential.phrase
 
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
-import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
+import com.cabrol.francois.mural.tools.RandomUtils
 
 /**
  * Create a sequence of PhraseGenerator objects which ones will allow to generate each phrases of the sequence
@@ -20,9 +20,7 @@ object sequenceOfPhraseGeneratorsFactory {
   private def randomPhraseDuration(sequenceLength:Int, startingPoint:Float):Float = {
     // a round is done on maxDuration from the second decimal
     val maxDuration = BigDecimal((sequenceLength - startingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-    val r = Math.round(RandomUtils.exponentialDistributionBetween(0, maxDuration, 0.5));
-    Debug.log("phrase-duration", r)
-    r
+    Math.round(RandomUtils.exponentialDistributionBetween(0, maxDuration, 0.5))
   }
 
   /**

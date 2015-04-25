@@ -35,7 +35,7 @@ object Debug {
   val phraseGenerator   =true
   val sequenceGenerator =false
   val pitchGenerator    =false
-  val curve             =false
+  val curve             =true
   val streamGenerator   =false
 
   def streamGenerator(msg:String):Unit   = if(streamGenerator)   println("[STREAM_GENERATOR] "   + msg)
@@ -50,7 +50,7 @@ object Debug {
 
   def curve(msg:String):Unit             = if(curve)             println("[CURB] "               + msg)
   
-  def log(filename:String, log:AnyVal) = {
+  def log(filename:String, log:String) = {
     val output = File(filename + ".txt").writer(true, Codec.UTF8)
     output.append(log + " ")
     output.close

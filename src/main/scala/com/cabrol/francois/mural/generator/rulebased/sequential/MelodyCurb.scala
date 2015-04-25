@@ -19,7 +19,7 @@
 
 package com.cabrol.francois.mural.generator.rulebased.sequential
 
-import com.cabrol.francois.mural.tools.RandomUtils
+import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
 import com.cabrol.francois.mural.generator.rulebased.parameters.Direction
 
 /**
@@ -37,6 +37,7 @@ object MelodyCurbEnum extends Enumeration {
   def randomType:MelodyCurbEnum.MelodyCurbEnum = {
     val v = this.values
     val s = v.toSeq(RandomUtils.intBetween(0, this.maxId))
+    Debug.log("melody_curve_type", s.toString)
     s
   }
 

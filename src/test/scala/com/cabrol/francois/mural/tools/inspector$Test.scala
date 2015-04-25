@@ -6,7 +6,7 @@ import com.cabrol.francois.mural.generator.rulebased.method.Methods
 import com.cabrol.francois.mural.generator.rulebased.parameters._
 import org.scalatest.{Matchers, BeforeAndAfter, FunSpec}
 
-class SetSpec extends FunSpec with BeforeAndAfter with Matchers {
+class Inspector$Test extends FunSpec with BeforeAndAfter with Matchers {
 
   val parameters = {
     val parentNotes = List()

@@ -28,7 +28,7 @@ class Inspector(params:Parameters) {
       throw InspectionException(note + " is out of ambitus " + params.global.ambitus)
     }
 
-    // Test percentage of notes in chord
+    // TODO Test percentage of notes in chord
 
     // Test notes are in the harmony progression or scale
     val harmony:HarmonicDefinition = params.global.harmonicProgression.getHarmonyForTheTimePosition(note.getRhythmicNote.getStart)
