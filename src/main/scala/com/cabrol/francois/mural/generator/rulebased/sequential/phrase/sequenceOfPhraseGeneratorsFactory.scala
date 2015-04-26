@@ -31,8 +31,10 @@ object sequenceOfPhraseGeneratorsFactory {
    */
   private def randomGapDurationBetweenTwoPhrases(sequenceLength:Int, endingPoint:Float):Float = {
     // a round is done on maxDuration from the second decimal
+    val maxRequire = 5
     val maxDuration = BigDecimal((sequenceLength - endingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-    RandomUtils.exponentialDistributionBetween(0, 1, 0.99).toFloat
+    val max = if (maxRequire > maxDuration) maxDuration else maxRequire
+    RandomUtils.exponentialDistributionBetween(0, max, 0.99).toFloat
   }
 
   /**

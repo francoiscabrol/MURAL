@@ -85,7 +85,7 @@ case class PhraseGenerator(val startingPoint:Float,
    */
   def generateThePhrase:List[Note] = {
 
-    melodyCurveFactory.randomizeCurbType
+    melodyCurveFactory.randomizeCurveType
 
     /**
      * Add a new note until

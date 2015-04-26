@@ -8,7 +8,7 @@ import com.cabrol.francois.melvi.view.VisualiserView
 import com.cabrol.francois.mural.generator.rulebased.Generator
 import com.cabrol.francois.mural.generator.rulebased.method.Methods
 import com.cabrol.francois.mural.generator.rulebased.parameters.{HarmonicDefinition, _}
-import com.cabrol.francois.mural.tools.Inspector
+import com.cabrol.francois.mural.tools.{Debug, Inspector}
 
 import scala.collection.mutable
 
@@ -31,7 +31,7 @@ object Test {
     val pSilence = 0
     val percentageOfNoteInChord = 50
     val numOfNoteAtTheSameTimeUnit = 1
-    val density = 6
+    val density = 3
     val variance = 0
     val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.up, variance, density, 0, percentageOfNoteInChord)
     val dynamic: List[DynamicParameters] = List()
@@ -45,7 +45,9 @@ object Test {
       val beforeTime = System.currentTimeMillis()
       val notes = Generator.generate(param)
 
-      println("generation execution time:" + (System.currentTimeMillis() - beforeTime))
+      val generationTime = (System.currentTimeMillis() - beforeTime)
+      println("generation execution time:" + generationTime)
+      Debug.log("generation execution time", generationTime.toString)
 
       inpector.inspect(notes)
 

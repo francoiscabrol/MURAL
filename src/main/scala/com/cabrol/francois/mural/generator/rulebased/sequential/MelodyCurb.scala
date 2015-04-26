@@ -30,11 +30,11 @@ import com.cabrol.francois.mural.generator.rulebased.parameters.Direction
  * To change this template use File | Settings | File Templates.
  */
 
-object MelodyCurbEnum extends Enumeration {
-  type MelodyCurbEnum = Value
+object MelodyCurveEnum extends Enumeration {
+  type MelodyCurveEnum = Value
   val ascendant, descendant, brownien, random = Value
 
-  def randomType:MelodyCurbEnum.MelodyCurbEnum = {
+  def randomType:MelodyCurveEnum.MelodyCurveEnum = {
     val v = this.values
     val s = v.toSeq(RandomUtils.intBetween(0, this.maxId))
     Debug.log("melody_curve_type", s.toString)
@@ -47,7 +47,7 @@ class MelodyCurveRandomizer{
 
   def probThatNextAddSameThanPrevious = RandomUtils.intBetween(0, 100);
 
-  var curbType:MelodyCurbEnum.MelodyCurbEnum = MelodyCurbEnum.randomType
+  var curveType:MelodyCurveEnum.MelodyCurveEnum = MelodyCurveEnum.randomType
 
   def newDirection:Direction.Direction = {
 
@@ -58,11 +58,11 @@ class MelodyCurveRandomizer{
       }
     }
 
-    curbType match {
-      case MelodyCurbEnum.ascendant => Direction.up
-      case MelodyCurbEnum.descendant => Direction.down
-      case MelodyCurbEnum.brownien => randomlyUpOrDown
-      case MelodyCurbEnum.random =>
+    curveType match {
+      case MelodyCurveEnum.ascendant => Direction.up
+      case MelodyCurveEnum.descendant => Direction.down
+      case MelodyCurveEnum.brownien => randomlyUpOrDown
+      case MelodyCurveEnum.random =>
           (RandomUtils.intBetween(0,100)) match {
             case x if x > probThatNextAddSameThanPrevious => Direction.both
             case _ => randomlyUpOrDown
@@ -70,8 +70,10 @@ class MelodyCurveRandomizer{
     }
   }
 
-  def randomizeCurbType = {
-    curbType = MelodyCurbEnum.randomType
+  def randomizeCurveType = {
+    val t = MelodyCurveEnum.randomType
+    Debug.curve("New melody curve is " + t)
+    curveType = t
   }
 
 }

@@ -48,7 +48,7 @@ class StreamGenerator(var param:Parameters) extends Actor {
 
     Debug.streamGenerator("Start")
 
-    melodyCurveFactory.randomizeCurbType
+    melodyCurveFactory.randomizeCurveType
 
     loop{
       react{
