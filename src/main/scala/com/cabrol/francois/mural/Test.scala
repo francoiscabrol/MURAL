@@ -31,9 +31,9 @@ object Test {
     val pSilence = 0
     val percentageOfNoteInChord = 50
     val numOfNoteAtTheSameTimeUnit = 1
-    val density = 3
-    val variance = 0
-    val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.up, variance, density, 0, percentageOfNoteInChord)
+    val density = 6
+    val variance = 3
+    val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord)
     val dynamic: List[DynamicParameters] = List()
     val param = Parameters(global, dynamic, 1)
 

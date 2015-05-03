@@ -19,13 +19,26 @@
 
 package com.cabrol.francois.mural.generator.rulebased.sequential.transition
 
-import com.cabrol.francois.libjamu.musictheory.entity.note.{RhythmicNote, Note}
+import com.cabrol.francois.libjamu.musictheory.entity.note.{Note, RhythmicNote}
 import com.cabrol.francois.mural.generator.rulebased.parameters.{Direction, Parameters}
-import com.cabrol.francois.mural.tools.RandomUtils
+import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
 
 
 object RhythmGenerator {
 
+  def convertDensityToDuration(density:Int):Float = {
+    //TODO unit tests!!
+    val densityToDuration:List[Float] = List(0.25f, 0.5f, 0.75f, 1, 1.5f, 2, 4)
+    val reverted = densityToDuration.reverse
+
+    if(density < 0)
+      return densityToDuration.last
+    else if(density >= reverted.size)
+      return densityToDuration.head
+
+    reverted(density);
+  }
+  
   def generateRhythmicNote(param:Parameters, previousNote:Option[Note], startingPointDefined:Option[Float]):RhythmicNote = {
 
     def newStartingPoint:Float = startingPointDefined match {
@@ -37,18 +50,6 @@ object RhythmGenerator {
     }
 
     def newDuration(startingPoint:Float):Float = {
-
-      def convertisorDensityToDuration(density:Int):Float = {
-        val densityToDuration:List[Float] = List(0.25f, 0.5f, 0.75f, 1, 1.5f, 2, 4)
-        val reverted = densityToDuration.reverse
-
-        if(density < 0)
-          densityToDuration.head
-        else if(density > densityToDuration.length-1)
-          densityToDuration.last;
-
-        reverted(density);
-      }
 
       val densityChoice:Int = {
         val dynamicParameters = param.getDynamic(startingPoint)
@@ -65,15 +66,21 @@ object RhythmGenerator {
           case Direction.down => density
           case _ => density + variance
         }
-
+        
+        Debug.rhythmGenerator("minDensity:"+minDensity + " and maxDensity:"+maxDensity)
+        
         RandomUtils.intBetween(minDensity, maxDensity)
       }
-      convertisorDensityToDuration(densityChoice)
+
+      Debug.rhythmGenerator("density choice:"+ densityChoice)
+      convertDensityToDuration(densityChoice)
     }
 
     val startingPoint = newStartingPoint
 
-    new RhythmicNote(startingPoint, newDuration(startingPoint))
+    val duration = newDuration(startingPoint)
+    
+    new RhythmicNote(startingPoint, duration)
   }
 
 }

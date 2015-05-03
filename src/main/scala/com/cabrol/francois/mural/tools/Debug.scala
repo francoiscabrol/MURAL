@@ -31,12 +31,13 @@ import scala.reflect.io.File
  */
 object Debug {
 
-  val transitionalState =false
-  val phraseGenerator   =true
-  val sequenceGenerator =false
-  val pitchGenerator    =true
-  val curve             =true
-  val streamGenerator   =false
+  val transitionalState = false
+  val phraseGenerator   = true
+  val sequenceGenerator = false
+  val pitchGenerator    = false
+  val rhythmGenerator   = true
+  val curve             = true
+  val streamGenerator   = false
 
   def streamGenerator(msg:String):Unit   = if(streamGenerator)   println("[STREAM_GENERATOR] "   + msg)
   
@@ -45,6 +46,8 @@ object Debug {
   def sequenceGenerator(msg:String):Unit = if(sequenceGenerator) println("[SEQUENCE_GENERATOR] " + msg)
 
   def pitchGenerator(msg:String):Unit    = if(pitchGenerator)    println("[PITCH_GENERATOR] "    + msg)
+  
+  def rhythmGenerator(msg:String):Unit   = if(rhythmGenerator)  println("[RHYTM_GENERATOR] "    + msg)
 
   def phraseGenerator(msg:String):Unit   = if(phraseGenerator)   println("[PHRASE_GENERATOR] "   + msg)
 
