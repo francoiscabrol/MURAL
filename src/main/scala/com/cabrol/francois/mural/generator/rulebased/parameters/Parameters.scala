@@ -19,10 +19,8 @@
 
 package com.cabrol.francois.mural.generator.rulebased.parameters
 
-import com.cabrol.francois.mural.generator.rulebased.method.Methods
-import Methods.Method
 import com.cabrol.francois.libjamu.musictheory.entity.note.Note
-import com.cabrol.francois.mural.generator.rulebased.method.Methods
+import com.cabrol.francois.mural.generator.rulebased.method.Methods.Method
 
 object Direction extends Enumeration {
   type Direction = Value

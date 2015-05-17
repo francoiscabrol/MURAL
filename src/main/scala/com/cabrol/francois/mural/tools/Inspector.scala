@@ -39,7 +39,12 @@ class Inspector(params:Parameters) {
   }
   
   def inspectRhythmicNote(note:Note):Boolean = {
-
+    val endingNotePosition = note.getRhythmicNote.getStart + note.getRhythmicNote.getDuration
+    
+    // test if the note is in the sequence scope 
+    if (note.getRhythmicNote.getStart > params.global.sequenceLenght - 1)
+      throw InspectionException("The note "+note+" is out of sequence time boundary")
+    
     true
   }
   

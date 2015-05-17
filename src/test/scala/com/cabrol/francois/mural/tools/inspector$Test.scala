@@ -28,7 +28,7 @@ class Inspector$Test extends FunSpec with BeforeAndAfter with Matchers {
   
   val inspector = new Inspector(parameters)
   
-  describe("inspectNoteHarmony"){
+  describe("inspectNoteHarmony") {
     it("should failed if the note is out the ambitus") {
       val note = new Note(new RhythmicNote(0, 1), new Key(72))
       a [Exception] should be thrownBy {
@@ -52,6 +52,19 @@ class Inspector$Test extends FunSpec with BeforeAndAfter with Matchers {
         inspector.inspectNoteHarmony(note)
       }
       //error.get should include regex "not in the scale"
+    }
+  }
+  
+  describe("inspectRhythmicNote") {
+    it ("should failed if the note is out of time boundaries") {
+      val note = new Note(new RhythmicNote(65, 2), new Key(60))
+      the [Exception] thrownBy {
+        inspector.inspectRhythmicNote(note)
+      } getMessage() should include ("out of sequence")
+    }
+    it ("should success if the note is contains between the time boundaries") {
+      val note = new Note(new RhythmicNote(0, 65), new Key(60))
+      noException should be thrownBy inspector.inspectRhythmicNote(note)
     }
   }
 }

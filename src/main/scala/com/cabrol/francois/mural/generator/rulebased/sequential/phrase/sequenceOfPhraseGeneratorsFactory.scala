@@ -90,7 +90,7 @@ object sequenceOfPhraseGeneratorsFactory {
 
     def addPhrase(phrases:List[PhraseGenerator]):List[PhraseGenerator] = {
       // create new PhraseGenerator objects until the last phrase go out the sequence
-      if(phrases.last.endingPoint >= (parameters.global.sequenceLenght - 0.5))
+      if(phrases.last.endingPoint >= (parameters.global.sequenceLenght - 1))
         phrases
       else
         addPhrase(phrases ::: List(createAnyPhraseGenerator(phrases.last)))
