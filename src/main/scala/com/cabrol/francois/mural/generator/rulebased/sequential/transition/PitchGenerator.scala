@@ -185,11 +185,9 @@ object PitchGenerator {
       else {
         Debug.pitchGenerator("Since the note would be out of ambitus, we change the randomize curve")
         melodyCurveFactory.randomizeCurveType
-        val p = previousNotePosition - relativePosition
-        require(p > 0, "new position should be > 0")
-        p
-      } 
-    } 
+        previousNotePosition - relativePosition
+      }
+    } ensuring(_ >= 0, "new position should be > 0")
                                            
     new Key(pitchesAvailable.apply(position))
   }

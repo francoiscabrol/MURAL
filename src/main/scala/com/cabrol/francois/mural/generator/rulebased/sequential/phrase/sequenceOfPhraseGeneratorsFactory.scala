@@ -20,10 +20,8 @@ object SequenceOfPhraseGeneratorsFactory {
   def randomPhraseDuration(sequenceLength:Int, startingPoint:Float):Int = {
     // a round is done on maxDuration from the second decimal
     val maxDuration = BigDecimal((sequenceLength - startingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-    val duration = math.ceil(RandomUtils.exponentialDistributionBetween(0, maxDuration, 0.5))
-    require(duration >= 1, "The duration " + duration + " should be superior than 0")
-    duration.toInt
-  }
+    math.ceil(RandomUtils.exponentialDistributionBetween(0, maxDuration, 0.5)).toInt
+  } ensuring (_ >= 1, "The duration should be superior than 0")
 
   /**
    *
