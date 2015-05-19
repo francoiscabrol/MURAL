@@ -39,6 +39,8 @@ case class PhraseGenerator(val startingPoint:Float,
                            val startingNote:ScaleNote,
                            val endingNote:ScaleNote,
                            val param:Parameters) {
+  
+  require(endingPoint > startingPoint, "The ending note should be superior than the starting note")
 
   private val melodyCurveFactory:MelodyCurveRandomizer = new MelodyCurveRandomizer
 
@@ -93,11 +95,15 @@ case class PhraseGenerator(val startingPoint:Float,
      * @return the phrase with the new note generated as a list of notes
      */
     def addNewNote(notes:List[Note]):List[Note] = {
+      // if the last note in positioned after the end of the phrase or after the end of all the sequence
       if( getLastNotePos(notes) >= param.global.sequenceLenght - 1 || getLastNotePos(notes) >= endingPoint) {
-        // if the last note in positioned after the end of the phrase or after the end of all the sequence
-        // delete the last one and generate a new one with the good method to ending the phrase
-        val n = notes.drop(-1)
-        n ::: List(generateLastNote(n.last))
+        if (notes.size > 1) {
+          // delete the last one and generate a new one with the good method to ending the phrase
+          val n = notes.dropRight(1)
+          n ::: List(generateLastNote(n.last))
+        } else {
+          notes
+        }
       }
       else
         addNewNote(notes ::: List(generateNewNote(notes.last)))

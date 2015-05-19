@@ -9,7 +9,7 @@ import com.cabrol.francois.mural.tools.RandomUtils
  * @author  Francois Cabrol <francois.cabrol@live.fr>
  * @since   2014-09-29
  */
-object sequenceOfPhraseGeneratorsFactory {
+object SequenceOfPhraseGeneratorsFactory {
 
   /**
    * Generate a random phrase duration
@@ -17,10 +17,12 @@ object sequenceOfPhraseGeneratorsFactory {
    * @param startingPoint
    * @return a random phrase duration
    */
-  private def randomPhraseDuration(sequenceLength:Int, startingPoint:Float):Float = {
+  def randomPhraseDuration(sequenceLength:Int, startingPoint:Float):Int = {
     // a round is done on maxDuration from the second decimal
     val maxDuration = BigDecimal((sequenceLength - startingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
-    Math.round(RandomUtils.exponentialDistributionBetween(0, maxDuration, 0.5))
+    val duration = math.ceil(RandomUtils.exponentialDistributionBetween(0, maxDuration, 0.5))
+    require(duration >= 1, "The duration " + duration + " should be superior than 0")
+    duration.toInt
   }
 
   /**
@@ -44,11 +46,11 @@ object sequenceOfPhraseGeneratorsFactory {
    * @return a random phrase ending time point
    */
   private def randomEndingPoint(sequenceLength:Int, startingPoint:Float):Float = {
-    val endingPoint = startingPoint + randomPhraseDuration(sequenceLength, startingPoint)
+    val endingPoint:Double = startingPoint + randomPhraseDuration(sequenceLength, startingPoint)
     if(endingPoint > sequenceLength)
       sequenceLength
     else
-      Math.round(endingPoint)
+      math.round(endingPoint)
   }
 
   /**
@@ -90,7 +92,9 @@ object sequenceOfPhraseGeneratorsFactory {
 
     def addPhrase(phrases:List[PhraseGenerator]):List[PhraseGenerator] = {
       // create new PhraseGenerator objects until the last phrase go out the sequence
-      if(phrases.last.endingPoint >= (parameters.global.sequenceLenght - 1))
+      if (phrases.last.startingPoint >= (parameters.global.sequenceLenght - 1))
+        phrases.dropRight(1)
+      else if (phrases.last.endingPoint >= (parameters.global.sequenceLenght - 1))
         phrases
       else
         addPhrase(phrases ::: List(createAnyPhraseGenerator(phrases.last)))

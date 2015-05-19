@@ -21,7 +21,7 @@ package com.cabrol.francois.mural.generator.rulebased.method
 
 import com.cabrol.francois.libjamu.musictheory.entity.note.Note
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
-import com.cabrol.francois.mural.generator.rulebased.sequential.phrase.{sequenceOfPhraseGeneratorsFactory, PhraseGenerator}
+import com.cabrol.francois.mural.generator.rulebased.sequential.phrase.{SequenceOfPhraseGeneratorsFactory, PhraseGenerator}
 import com.cabrol.francois.mural.tools.Debug
 
 /**
@@ -41,7 +41,7 @@ class RuleBased extends GenerationMethod{
   def generateSequence(parameters : Parameters):List[Note] = {
 
     // Create the sequence of PhraseGenerator objects
-    val phraseGenerators = sequenceOfPhraseGeneratorsFactory.create(parameters)
+    val phraseGenerators = SequenceOfPhraseGeneratorsFactory.create(parameters)
 
     // print output
     for(p <- phraseGenerators) Debug.sequenceGenerator(p.toString)
