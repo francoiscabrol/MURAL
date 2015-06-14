@@ -2,7 +2,7 @@ package com.cabrol.francois.mural.generator.rulebased.sequential.phrase
 
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
-import com.cabrol.francois.mural.tools.RandomUtils
+import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
 
 /**
  * Create a sequence of PhraseGenerator objects which ones will allow to generate each phrases of the sequence
@@ -32,9 +32,11 @@ object SequenceOfPhraseGeneratorsFactory {
   private def randomGapDurationBetweenTwoPhrases(sequenceLength:Int, endingPoint:Float):Float = {
     // a round is done on maxDuration from the second decimal
     val maxRequire = 5
-    val maxDuration = BigDecimal((sequenceLength - endingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
+    val maxDuration = BigDecimal((sequenceLength - endingPoint-1)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
     val max = if (maxRequire > maxDuration) maxDuration else maxRequire
-    RandomUtils.exponentialDistributionBetween(0, max, 0.99).toFloat
+    val r = RandomUtils.exponentialDistributionBetween(1, max, 0.5).toFloat
+    Debug.log("gap", r.toString)
+    r
   }
 
   /**
@@ -44,6 +46,7 @@ object SequenceOfPhraseGeneratorsFactory {
    * @return a random phrase ending time point
    */
   private def randomEndingPoint(sequenceLength:Int, startingPoint:Float):Float = {
+    require(startingPoint < sequenceLength)
     val endingPoint:Double = startingPoint + randomPhraseDuration(sequenceLength, startingPoint)
     if(endingPoint > sequenceLength)
       sequenceLength
@@ -65,8 +68,10 @@ object SequenceOfPhraseGeneratorsFactory {
      */
     def createPhraseGenerator(startingPoint: Float):PhraseGenerator = {
       val endingPoint = randomEndingPoint(parameters.global.sequenceLenght, startingPoint)
-      val startingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(startingPoint).scale.getScaleNote(0)
-      val endingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(endingPoint).chord.getScaleNote(2)
+      val startingNoteFunction = RandomUtils.randomElement(List(0, 2, 4))
+      val startingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(startingPoint).scale.getScaleNote(startingNoteFunction)
+      val endingNoteFunction = RandomUtils.randomElement(List(0, 2, 4))
+      val endingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(endingPoint).chord.getScaleNote(endingNoteFunction)
       new PhraseGenerator(startingPoint, endingPoint, startingNote, endingNote, parameters)
     }
 

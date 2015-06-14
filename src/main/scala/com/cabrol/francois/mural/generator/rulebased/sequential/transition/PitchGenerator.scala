@@ -96,10 +96,10 @@ object PitchGenerator {
    * @param ambitus
    * @return Non-deterministic key
    */
-  private def keyFromScaleNote(scaleNotePredefined:ScaleNote, ambitus:Ambitus):Key = {
+  def keyFromScaleNote(scaleNotePredefined:ScaleNote, ambitus:Ambitus):Key = {
     Debug.pitchGenerator("The scale note is determined :" + scaleNotePredefined)
-    val oct = octave(ambitus)
-    scaleNotePredefined.getKey(oct)
+    val pitchesAvailable = ambitus.filter(key => scaleNotePredefined.getPitch() == new ScaleNote(key).getPitch())
+    new Key(RandomUtils.randomElement(pitchesAvailable))
   }
 
   /**

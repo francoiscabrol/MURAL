@@ -29,6 +29,11 @@ import scala.util.Random
  * To change this template use File | Settings | File Templates.
  */
 object RandomUtils {
+  def randomElement[B](list: Seq[B]):B = {
+    val i = intBetween(0, list.size)
+    list(i)
+  }
+
 
   def intBetween(min:Int, max:Int):Int = {
     floatBetween(min, max).toInt

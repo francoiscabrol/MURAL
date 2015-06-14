@@ -34,8 +34,8 @@ object Debug {
   val transitionalState = false
   val phraseGenerator   = true
   val sequenceGenerator = false
-  val pitchGenerator    = false
-  val rhythmGenerator   = true
+  val pitchGenerator    = true
+  val rhythmGenerator   = false
   val curve             = true
   val streamGenerator   = false
 

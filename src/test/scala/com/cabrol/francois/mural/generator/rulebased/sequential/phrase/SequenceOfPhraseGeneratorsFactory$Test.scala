@@ -10,7 +10,7 @@ class SequenceOfPhraseGeneratorsFactory$Test extends FunSpec with BeforeAndAfter
 
   describe("randomPhraseDuration") {
     it("should success and the duration should be > 0") {
-      val duration = for (i <- 1 to 10) yield {
+      val duration = for (i <- 1 to 50) yield {
         SequenceOfPhraseGeneratorsFactory.randomPhraseDuration(10, 2)
       }
       duration.foreach(d => {

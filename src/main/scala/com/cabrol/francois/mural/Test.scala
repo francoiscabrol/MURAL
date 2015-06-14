@@ -22,17 +22,17 @@ object Test {
     print("Start the generator execution test")
 
     val parentNotes = List()
-    val chords: Map[Float, HarmonicDefinition] = Map((0, HarmonicDefinition(new Chord("C"), new Scale("C major"))), (1, HarmonicDefinition(new Chord("A-"), new Scale("A minor"))))
+    val chords: Map[Float, HarmonicDefinition] = Map((0, HarmonicDefinition(new Chord("C"), new Scale("C major"))), (1, HarmonicDefinition(new Chord("A-"), new Scale("C major"))))
     val hP = new HarmonicProgression(chords)
     val generationMethod = Methods.rulesBased
     val numBeatsPerBar = 4
-    val numBars = 16
+    val numBars = 4
     val ambitus: Ambitus = new Ambitus(50, 71)
     val pSilence = 0
     val percentageOfNoteInChord = 50
     val numOfNoteAtTheSameTimeUnit = 1
     val density = 6
-    val variance = 3
+    val variance = 2
     val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord)
     val dynamic: List[DynamicParameters] = List()
     val param = Parameters(global, dynamic, 1)
@@ -40,8 +40,8 @@ object Test {
     var visuViews = mutable.MutableList[VisualiserView]()
 
     var inpector = new Inspector(param)
-    
-    for (i <- 1 to 4) {
+
+    for (i <- 1 to 5) {
       val beforeTime = System.currentTimeMillis()
       val notes = Generator.generate(param)
 
