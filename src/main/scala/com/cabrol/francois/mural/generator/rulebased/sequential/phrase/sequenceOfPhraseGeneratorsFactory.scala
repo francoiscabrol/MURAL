@@ -17,9 +17,10 @@ object SequenceOfPhraseGeneratorsFactory {
    * @param startingPoint
    * @return a random phrase duration
    */
-  def randomPhraseDuration(sequenceLength:Int, startingPoint:Float):Int = {
+  def randomPhraseDuration(sequenceLength:Int, startingPoint:Float, maxRequire:Float):Int = {
     // a round is done on maxDuration from the second decimal
     val maxDuration = BigDecimal((sequenceLength - startingPoint)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
+    val max = if (maxRequire > maxDuration) maxDuration else maxRequire
     math.ceil(RandomUtils.exponentialDistributionBetween(0, maxDuration, 0.5)).toInt
   } ensuring (_ >= 1, "The duration should be superior than 0")
 
@@ -29,14 +30,11 @@ object SequenceOfPhraseGeneratorsFactory {
    * @param endingPoint
    * @return a random duration
    */
-  private def randomGapDurationBetweenTwoPhrases(sequenceLength:Int, endingPoint:Float):Float = {
+  private def randomGapDurationBetweenTwoPhrases(sequenceLength:Int, endingPoint:Float, maxRequire:Float):Float = {
     // a round is done on maxDuration from the second decimal
-    val maxRequire = 5
     val maxDuration = BigDecimal((sequenceLength - endingPoint-1)).setScale(2, BigDecimal.RoundingMode.HALF_UP).toFloat
     val max = if (maxRequire > maxDuration) maxDuration else maxRequire
-    val r = RandomUtils.exponentialDistributionBetween(1, max, 0.5).toFloat
-    Debug.log("gap", r.toString)
-    r
+    RandomUtils.exponentialDistributionBetween(1, max, 0.5).toFloat
   }
 
   /**
@@ -45,9 +43,9 @@ object SequenceOfPhraseGeneratorsFactory {
    * @param startingPoint
    * @return a random phrase ending time point
    */
-  private def randomEndingPoint(sequenceLength:Int, startingPoint:Float):Float = {
+  private def randomEndingPoint(sequenceLength:Int, startingPoint:Float, maxRequire:Float):Float = {
     require(startingPoint < sequenceLength)
-    val endingPoint:Double = startingPoint + randomPhraseDuration(sequenceLength, startingPoint)
+    val endingPoint:Double = startingPoint + randomPhraseDuration(sequenceLength, startingPoint, maxRequire)
     if(endingPoint > sequenceLength)
       sequenceLength
     else
@@ -67,11 +65,11 @@ object SequenceOfPhraseGeneratorsFactory {
      * @return the new PhraseGenerator object
      */
     def createPhraseGenerator(startingPoint: Float):PhraseGenerator = {
-      val endingPoint = randomEndingPoint(parameters.global.sequenceLenght, startingPoint)
-      val startingNoteFunction = RandomUtils.randomElement(List(0, 2, 4))
-      val startingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(startingPoint).scale.getScaleNote(startingNoteFunction)
-      val endingNoteFunction = RandomUtils.randomElement(List(0, 2, 4))
-      val endingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(endingPoint).chord.getScaleNote(endingNoteFunction)
+      val endingPoint = randomEndingPoint(parameters.global.sequenceLenght, startingPoint, parameters.global.phrase.gap.max)
+      val startingNoteDegree = RandomUtils.randomElement(List(0, 2, 4))
+      val startingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(startingPoint).scale.getScaleNote(startingNoteDegree)
+      val endingNoteDegree = RandomUtils.randomElement(List(0, 1, 2, 4, 6))
+      val endingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(endingPoint).chord.getScaleNote(endingNoteDegree)
       new PhraseGenerator(startingPoint, endingPoint, startingNote, endingNote, parameters)
     }
 
@@ -89,7 +87,7 @@ object SequenceOfPhraseGeneratorsFactory {
      * @return
      */
     def createAnyPhraseGenerator(lastPhraseGenerator:PhraseGenerator):PhraseGenerator = {
-      val startingPoint = Math.round(lastPhraseGenerator.endingPoint + randomGapDurationBetweenTwoPhrases(parameters.global.sequenceLenght, lastPhraseGenerator.endingPoint))
+      val startingPoint = Math.round(lastPhraseGenerator.endingPoint + randomGapDurationBetweenTwoPhrases(parameters.global.sequenceLenght, lastPhraseGenerator.endingPoint, parameters.global.phrase.gap.max))
       createPhraseGenerator(startingPoint)
     }
 

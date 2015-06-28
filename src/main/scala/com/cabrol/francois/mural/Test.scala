@@ -27,13 +27,13 @@ object Test {
     val generationMethod = Methods.rulesBased
     val numBeatsPerBar = 4
     val numBars = 4
-    val ambitus: Ambitus = new Ambitus(50, 71)
+    val ambitus: Ambitus = new Ambitus(46, 76)
     val pSilence = 0
     val percentageOfNoteInChord = 50
     val numOfNoteAtTheSameTimeUnit = 1
     val density = 6
-    val variance = 2
-    val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord)
+    val variance = 0
+    val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord, PhraseParameters(Interval(0, 6), Interval(0, 0)))
     val dynamic: List[DynamicParameters] = List()
     val param = Parameters(global, dynamic, 1)
 

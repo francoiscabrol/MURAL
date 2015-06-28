@@ -27,6 +27,10 @@ object Direction extends Enumeration {
   val up, down, both = Value
 }
 
+case class Interval(min:Float, max:Float)
+
+case class PhraseParameters(duration:Interval = Interval(0, 5), gap:Interval = Interval(0, 3))
+
 class GlobalParameters (val method:Method,
                         val parentNotes:List[Note],
                         val numBeatsPerBar:Int,
@@ -39,7 +43,8 @@ class GlobalParameters (val method:Method,
                         val variance:Int,
                         override val rhythmicDensity:Int,
                         override val variation:Int,
-                        override val percentageNotesInChords:Int) extends DynamicParameters(rhythmicDensity,
+                        override val percentageNotesInChords:Int,
+                        val phrase:PhraseParameters = PhraseParameters()) extends DynamicParameters(rhythmicDensity,
                                                                                             variation,
                                                                                             percentageNotesInChords){
 
