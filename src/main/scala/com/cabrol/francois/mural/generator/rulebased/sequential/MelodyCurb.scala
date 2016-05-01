@@ -34,40 +34,37 @@ object MelodyCurveEnum extends Enumeration {
   type MelodyCurveEnum = Value
   val ascendant, descendant, brownien, random = Value
 
-  def randomType:MelodyCurveEnum.MelodyCurveEnum = {
-    val v = this.values
-    val s = v.toSeq(RandomUtils.intBetween(0, this.maxId))
-    Debug.log("melody_curve_type", s.toString)
-    s
-  }
+  def randomType:MelodyCurveEnum.MelodyCurveEnum = this.values.toSeq(RandomUtils.intBetween(0, this.maxId))
 
 }
 
-class MelodyCurveRandomizer{
+class MelodyCurveRandomizer {
 
-  def probThatNextAddSameThanPrevious = RandomUtils.intBetween(0, 100);
+  private def probThatNextAddSameThanPrevious = RandomUtils.intBetween(0, 100)
 
   var curveType:MelodyCurveEnum.MelodyCurveEnum = MelodyCurveEnum.randomType
 
   def newDirection:Direction.Direction = {
 
-    def randomlyUpOrDown = {
-      (RandomUtils.trueOrFalse) match {
+    def randomlyUpOrDown = (RandomUtils.trueOrFalse) match {
         case true => Direction.up
         case false => Direction.down
       }
-    }
 
-    curveType match {
+    val direction = curveType match {
       case MelodyCurveEnum.ascendant => Direction.up
       case MelodyCurveEnum.descendant => Direction.down
       case MelodyCurveEnum.brownien => randomlyUpOrDown
       case MelodyCurveEnum.random =>
-          (RandomUtils.intBetween(0,100)) match {
-            case x if x > probThatNextAddSameThanPrevious => Direction.both
-            case _ => randomlyUpOrDown
-          }
+        (RandomUtils.intBetween(0,100)) match {
+          case x if x > probThatNextAddSameThanPrevious => Direction.both
+          case _ => randomlyUpOrDown
+        }
     }
+
+    Debug.curve("New curve direction is " + direction)
+
+    direction
   }
 
   def randomizeCurveType = {

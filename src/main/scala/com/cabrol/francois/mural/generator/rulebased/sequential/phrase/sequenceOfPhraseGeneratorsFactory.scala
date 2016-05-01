@@ -2,7 +2,7 @@ package com.cabrol.francois.mural.generator.rulebased.sequential.phrase
 
 import com.cabrol.francois.libjamu.musictheory.entity.scaleNote.ScaleNote
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
-import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
+import com.cabrol.francois.mural.tools.RandomUtils
 
 /**
  * Create a sequence of PhraseGenerator objects which ones will allow to generate each phrases of the sequence
@@ -93,10 +93,10 @@ object SequenceOfPhraseGeneratorsFactory {
 
     def addPhrase(phrases:List[PhraseGenerator]):List[PhraseGenerator] = {
       // create new PhraseGenerator objects until the last phrase go out the sequence
-      if (phrases.last.startingPoint >= (parameters.global.sequenceLenght - 1))
-        phrases.dropRight(1)
-      else if (phrases.last.endingPoint >= (parameters.global.sequenceLenght - 1))
-        phrases
+      if (phrases.last.startingPoint >= (parameters.global.sequenceLenght - 1)) // if the last phrase start after the sequence end
+        phrases.dropRight(1)                                                    // return the sequence without the last phrase
+      else if (phrases.last.endingPoint >= (parameters.global.sequenceLenght - 1)) //if the last phrase end after the sequence end
+        phrases                                                                    // return the sequence // TODO should modify the last phrase to fit in the sequence?
       else
         addPhrase(phrases ::: List(createAnyPhraseGenerator(phrases.last)))
     }

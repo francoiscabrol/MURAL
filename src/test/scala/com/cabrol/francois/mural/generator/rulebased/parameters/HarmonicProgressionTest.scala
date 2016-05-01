@@ -26,5 +26,13 @@ class HarmonicProgressionTest extends FunSpec with BeforeAndAfter with Matchers 
       val harmDef = harmonicProgression.getHarmonyForTheTimePosition(2)
       assert(harmDef == harmDefC)
     }
+    it("should return the harmonic definition at time position 3") {
+      val harmDef = harmonicProgression.getHarmonyForTheTimePosition(3)
+      assert(harmDef == harmDefA)
+    }
+    it("should return the harmonic definition at time position 4") {
+      val harmDef = harmonicProgression.getHarmonyForTheTimePosition(4)
+      assert(harmDef == harmDefC)
+    }
   }
 }
