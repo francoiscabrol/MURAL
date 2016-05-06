@@ -19,7 +19,7 @@ class Inspector$Test extends FunSpec with BeforeAndAfter with Matchers {
     val pSilence = 0
     val percentageOfNoteInChord = 50
     val numOfNoteAtTheSameTimeUnit = 1
-    val density = 1
+    val density = Density.EIGHT_NOTE
     val variance = 0
     val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.up, variance, density, 0, percentageOfNoteInChord)
     val dynamic: List[DynamicParameters] = List()

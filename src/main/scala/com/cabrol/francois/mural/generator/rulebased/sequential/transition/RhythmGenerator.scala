@@ -20,23 +20,22 @@
 package com.cabrol.francois.mural.generator.rulebased.sequential.transition
 
 import com.cabrol.francois.libjamu.musictheory.entity.note.{Note, RhythmicNote}
-import com.cabrol.francois.mural.generator.rulebased.parameters.{Direction, Parameters}
+import com.cabrol.francois.mural.generator.rulebased.parameters.{Density, Direction, Parameters}
 import com.cabrol.francois.mural.tools.{Debug, RandomUtils}
 
 
 object RhythmGenerator {
 
-  def convertDensityToDuration(density:Int):Float = {
+  val densities = List(Density.SIXTEENTH_NOTE, Density.EIGHT_NOTE, Density.QUARTER_NOTE, Density.HALF_NOTE, Density.WHOLE_NOTE)
+
+  def convertDensityToDuration(densityIndex:Int):Density.DensityVal = {
     //TODO unit tests!!
-    val densityToDuration:List[Float] = List(0.25f, 0.5f, 0.75f, 1, 1.5f, 2, 4)
-    val reverted = densityToDuration.reverse
+    if(densityIndex < 0)
+      return densities.head
+    else if(densityIndex >= densities.size)
+      return densities.last
 
-    if(density < 0)
-      return densityToDuration.last
-    else if(density >= reverted.size)
-      return densityToDuration.head
-
-    reverted(density);
+    densities(densityIndex)
   }
   
   def generateRhythmicNote(param:Parameters, previousNote:Option[Note], startingPointDefined:Option[Float]):RhythmicNote = {
@@ -58,13 +57,13 @@ object RhythmGenerator {
         val varianceDirection = param.global.varianceDirection
 
         val minDensity = varianceDirection match {
-          case Direction.up => density
-          case _ => density - variance
+          case Direction.up => densities.indexOf(density)
+          case _ => densities.indexOf(density) - variance
         }
 
         val maxDensity = varianceDirection match {
-          case Direction.down => density
-          case _ => density + variance
+          case Direction.down => densities.indexOf(density)
+          case _ => densities.indexOf(density) + variance
         }
         
         Debug.rhythmGenerator("minDensity:"+minDensity + " and maxDensity:"+maxDensity)
@@ -73,7 +72,8 @@ object RhythmGenerator {
       }
 
       Debug.rhythmGenerator("density choice:"+ densityChoice)
-      convertDensityToDuration(densityChoice)
+      val density = convertDensityToDuration(densityChoice)
+      density.getBeatPercentage
     }
 
     val startingPoint = newStartingPoint

@@ -41,7 +41,7 @@ class GlobalParameters (val method:Method,
                         val numOfNotesAtTheSameTimeUnit:Int,
                         val varianceDirection:Direction.Direction,
                         val variance:Int,
-                        override val rhythmicDensity:Int,
+                        override val rhythmicDensity: Density.DensityVal,
                         override val variation:Int,
                         override val percentageNotesInChords:Int,
                         val phrase:PhraseParameters = PhraseParameters()) extends DynamicParameters(rhythmicDensity,
@@ -58,7 +58,8 @@ class GlobalParameters (val method:Method,
 
 }
 
-class DynamicParameters(val rhythmicDensity:Int,
+// TODO delete the dynamicParameters. they should exists only in genSession
+class DynamicParameters(val rhythmicDensity:Density.DensityVal,
                         val variation:Int,
                         val percentageNotesInChords:Int)
 
