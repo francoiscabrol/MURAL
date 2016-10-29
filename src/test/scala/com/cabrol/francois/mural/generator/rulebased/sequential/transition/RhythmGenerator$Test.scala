@@ -1,5 +1,6 @@
 package com.cabrol.francois.mural.generator.rulebased.sequential.transition
 
+import com.cabrol.francois.mural.generator.rulebased.parameters.Density
 import org.scalatest.{BeforeAndAfter, FunSpec, Matchers}
 
 /**
@@ -11,7 +12,7 @@ class RhythmGenerator$Test extends FunSpec with BeforeAndAfter with Matchers {
   describe("The method"){
     describe("exponentialDistribution"){
       val duration = RhythmGenerator.convertDensityToDuration(6)
-      assert(duration == 0.25)
+      assert(duration == Density.WHOLE_NOTE)
     }
   }
 }

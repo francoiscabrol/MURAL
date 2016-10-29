@@ -23,7 +23,10 @@ object Test {
 
     val parentNotes = List()
     val hP = {
-      val chords: Map[Float, HarmonicDefinition] = Map((0, HarmonicDefinition(new Chord("C"), new Scale("C major"))), (2, HarmonicDefinition(new Chord("G"), new Scale("C major"))))
+      val DO = HarmonicDefinition(new Chord("C"), new Scale("C major"))
+      val SOL = HarmonicDefinition(new Chord("G"), new Scale("C major"))
+      val RE = HarmonicDefinition(new Chord("D minor"), new Scale("A minor"))
+      val chords: Map[Float, HarmonicDefinition] = Map((0, DO), (2, SOL), (3, DO), (4, RE))
       new HarmonicProgression(chords)
     }
     val generationMethod = Methods.rulesBased
@@ -31,10 +34,10 @@ object Test {
     val numBars = 6
     val ambitus: Ambitus = new Ambitus(40, 90)
     val pSilence = 0
-    val percentageOfNoteInChord = 50
+    val percentageOfNoteInChord = 80
     val numOfNoteAtTheSameTimeUnit = 1
-    val density = Density.SIXTEENTH_NOTE
-    val variance = 2
+    val density = Density.EIGHT_NOTE
+    val variance = 1
     val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord, PhraseParameters(Interval(0, 6), Interval(0, 0)))
     val dynamic: List[DynamicParameters] = List()
     val param = Parameters(global, dynamic, 1)
