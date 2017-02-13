@@ -27,9 +27,9 @@ object Direction extends Enumeration {
   val up, down, both = Value
 }
 
-case class Interval(min:Float, max:Float)
+case class RangeInt(min: Int, max: Int) extends Range(min, max, 1)
 
-case class PhraseParameters(duration:Interval = Interval(0, 5), gap:Interval = Interval(0, 3))
+case class PhraseParameters(duration: RangeInt = RangeInt(0, 5), gap: RangeInt = RangeInt(0, 3))
 
 class Parameters(val method:GenerationMethod,
                  val parentNotes:List[Note],

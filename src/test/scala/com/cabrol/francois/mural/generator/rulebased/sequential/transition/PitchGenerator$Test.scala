@@ -30,7 +30,7 @@ class PitchGenerator$Test extends FunSpec with BeforeAndAfter with Matchers {
     val numOfNoteAtTheSameTimeUnit = 1
     val density = Density.EIGHT_NOTE
     val variance = 0
-    new Parameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord, PhraseParameters(Interval(0, 6), Interval(0, 0)))
+    new Parameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord, PhraseParameters(RangeInt(0, 6), RangeInt(0, 0)))
   }
 
   val inspector = new Inspector(param)
