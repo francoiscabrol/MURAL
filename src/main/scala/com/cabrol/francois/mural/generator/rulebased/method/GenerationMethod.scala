@@ -22,7 +22,7 @@ package com.cabrol.francois.mural.generator.rulebased.method
 import com.cabrol.francois.libjamu.musictheory.entity.note.Note
 import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 
-trait GenerationMethod{
+trait GenerationMethod {
 
   def generateSequence(parameters : Parameters):List[Note]
 

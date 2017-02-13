@@ -18,13 +18,17 @@
  */
 
 package com.cabrol.francois.mural.generator.rulebased.method
+import com.cabrol.francois.libjamu.musictheory.entity.note.Note
+import com.cabrol.francois.mural.generator.rulebased.parameters.Parameters
 
 object Methods extends Enumeration {
-  val rulesBased = Method("com.cabrol.francois.mural.generator.rulebased.method.RuleBased")
-  // val keepingRhythm = Method("com.cabrol.francois.mural.generator.rulebased.method.KeepingRhythm")
+  val RULESBASED = Method()
+}
 
-  case class Method(name: String) extends super.Val(nextId, name) {
-    def getObject : GenerationMethod = Class.forName(name).newInstance.asInstanceOf[GenerationMethod];
+sealed case class Method() extends GenerationMethod {
+  private def getObject : GenerationMethod = this match {
+    case Methods.RULESBASED => new RuleBased
   }
 
+  override def generateSequence(parameters: Parameters): List[Note] = getObject.generateSequence(parameters)
 }

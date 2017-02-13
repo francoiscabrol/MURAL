@@ -20,7 +20,7 @@
 package com.cabrol.francois.mural.generator.rulebased.parameters
 
 import com.cabrol.francois.libjamu.musictheory.entity.note.Note
-import com.cabrol.francois.mural.generator.rulebased.method.Methods.Method
+import com.cabrol.francois.mural.generator.rulebased.method.GenerationMethod
 
 object Direction extends Enumeration {
   type Direction = Value
@@ -31,7 +31,7 @@ case class Interval(min:Float, max:Float)
 
 case class PhraseParameters(duration:Interval = Interval(0, 5), gap:Interval = Interval(0, 3))
 
-class GlobalParameters (val method:Method,
+class GlobalParameters (val method:GenerationMethod,
                         val parentNotes:List[Note],
                         val numBeatsPerBar:Int,
                         val numBars:Int,

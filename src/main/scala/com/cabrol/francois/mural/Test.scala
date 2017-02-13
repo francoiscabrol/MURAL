@@ -29,7 +29,7 @@ object Test {
       val chords: Map[Float, HarmonicDefinition] = Map((0, DO), (2, SOL), (3, DO), (4, RE))
       new HarmonicProgression(chords)
     }
-    val generationMethod = Methods.rulesBased
+    val generationMethod = Methods.RULESBASED
     val numBeatsPerBar = 4
     val numBars = 6
     val ambitus: Ambitus = new Ambitus(40, 90)

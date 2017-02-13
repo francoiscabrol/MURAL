@@ -33,6 +33,6 @@ object Generator {
    * @param param is the generation parameters object
    * @return the new sequence of notes
    */
-  def generate(param:Parameters) : List[Note] = param.global.method.getObject.generateSequence(param)
+  def generate(param:Parameters) : List[Note] = param.global.method.generateSequence(param)
 
 }

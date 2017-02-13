@@ -26,17 +26,15 @@ import scala.util.Random
  * User: francois
  * Date: 2013-07-29
  * Time: 18:16
- * To change this template use File | Settings | File Templates.
  */
 object RandomUtils {
   def randomElement[B](list: Seq[B]):B = {
-    val i = intBetween(0, list.size)
+    val i = Random.nextInt(list.length)
     list(i)
   }
 
-
-  def intBetween(min:Int, max:Int):Int = {
-    floatBetween(min, max).toInt
+  def intBetween(min: Int, max: Int): Int = {
+    min + Random.nextInt(max - min)
   }
 
   def floatBetween(min:Float, max:Float):Float = {
