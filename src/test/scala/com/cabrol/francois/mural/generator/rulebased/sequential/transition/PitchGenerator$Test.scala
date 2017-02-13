@@ -22,7 +22,7 @@ class PitchGenerator$Test extends FunSpec with BeforeAndAfter with Matchers {
       val chords: Map[Float, HarmonicDefinition] = Map((0, HarmonicDefinition(new Chord("C"), new Scale("C major"))), (1, HarmonicDefinition(new Chord("D-"), new Scale("C major"))))
       new HarmonicProgression(chords)
     }
-    val generationMethod = Methods.rulesBased
+    val generationMethod = Methods.RULESBASED
     val numBeatsPerBar = 4
     val numBars = 4
     val pSilence = 0
@@ -30,9 +30,7 @@ class PitchGenerator$Test extends FunSpec with BeforeAndAfter with Matchers {
     val numOfNoteAtTheSameTimeUnit = 1
     val density = Density.EIGHT_NOTE
     val variance = 0
-    val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord, PhraseParameters(Interval(0, 6), Interval(0, 0)))
-    val dynamic: List[DynamicParameters] = List()
-    Parameters(global, dynamic, 1)
+    new Parameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord, PhraseParameters(Interval(0, 6), Interval(0, 0)))
   }
 
   val inspector = new Inspector(param)

@@ -51,10 +51,9 @@ object RhythmGenerator {
     def newDuration(startingPoint:Float):Float = {
 
       val densityChoice:Int = {
-        val dynamicParameters = param.getDynamic(startingPoint)
-        val density = dynamicParameters.rhythmicDensity
-        val variance = param.global.variance
-        val varianceDirection = param.global.varianceDirection
+        val density = param.rhythmicDensity
+        val variance = param.variance
+        val varianceDirection = param.varianceDirection
 
         val minDensity = varianceDirection match {
           case Direction.up => densities.indexOf(density)

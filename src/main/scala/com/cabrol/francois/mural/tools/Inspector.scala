@@ -24,14 +24,14 @@ class Inspector(params:Parameters) {
   
   def inspectNoteHarmony(note:Note):Boolean = {
     // Test ambitus
-    if (!params.global.ambitus.contains(note.getKey.getMidiKey())) {
-      throw InspectionException(note + " is out of ambitus " + params.global.ambitus)
+    if (!params.ambitus.contains(note.getKey.getMidiKey())) {
+      throw InspectionException(note + " is out of ambitus " + params.ambitus)
     }
 
     // TODO Test percentage of notes in chord
 
     // Test notes are in the harmony progression or scale
-    val harmony:HarmonicDefinition = params.global.harmonicProgression.getHarmonyForTheTimePosition(note.getRhythmicNote.getStart)
+    val harmony:HarmonicDefinition = params.harmonicProgression.getHarmonyForTheTimePosition(note.getRhythmicNote.getStart)
     if (!harmony.scale.isIn(note.getKey.getScaleNote))
       throw InspectionException(note + " is not in the scale " + harmony.scale)
 
@@ -42,7 +42,7 @@ class Inspector(params:Parameters) {
     val endingNotePosition = note.getRhythmicNote.getStart + note.getRhythmicNote.getDuration
     
     // test if the note is in the sequence scope 
-    if (note.getRhythmicNote.getStart >= params.global.sequenceLenght)
+    if (note.getRhythmicNote.getStart >= params.sequenceLenght)
       throw InspectionException("The note "+note+" is out of sequence time boundary")
     
     true

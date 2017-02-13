@@ -38,9 +38,7 @@ object Test {
     val numOfNoteAtTheSameTimeUnit = 1
     val density = Density.EIGHT_NOTE
     val variance = 1
-    val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord, PhraseParameters(Interval(0, 6), Interval(0, 0)))
-    val dynamic: List[DynamicParameters] = List()
-    val param = Parameters(global, dynamic, 1)
+    val param = new Parameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord, PhraseParameters(Interval(0, 6), Interval(0, 0)))
 
     var visuViews = mutable.MutableList[VisualiserView]()
 

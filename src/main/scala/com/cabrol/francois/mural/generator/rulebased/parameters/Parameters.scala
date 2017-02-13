@@ -31,22 +31,20 @@ case class Interval(min:Float, max:Float)
 
 case class PhraseParameters(duration:Interval = Interval(0, 5), gap:Interval = Interval(0, 3))
 
-class GlobalParameters (val method:GenerationMethod,
-                        val parentNotes:List[Note],
-                        val numBeatsPerBar:Int,
-                        val numBars:Int,
-                        val ambitus:Ambitus,
-                        val harmonicProgression: HarmonicProgression,
-                        val percentageOfSilence:Int,
-                        val numOfNotesAtTheSameTimeUnit:Int,
-                        val varianceDirection:Direction.Direction,
-                        val variance:Int,
-                        override val rhythmicDensity: Density.DensityVal,
-                        override val variation:Int,
-                        override val percentageNotesInChords:Int,
-                        val phrase:PhraseParameters = PhraseParameters()) extends DynamicParameters(rhythmicDensity,
-                                                                                            variation,
-                                                                                            percentageNotesInChords){
+class Parameters(val method:GenerationMethod,
+                 val parentNotes:List[Note],
+                 val numBeatsPerBar:Int,
+                 val numBars:Int,
+                 val ambitus:Ambitus,
+                 val harmonicProgression: HarmonicProgression,
+                 val percentageOfSilence:Int,
+                 val numOfNotesAtTheSameTimeUnit:Int,
+                 val varianceDirection:Direction.Direction,
+                 val variance:Int,
+                 val rhythmicDensity: Density.DensityVal,
+                 val variation:Int,
+                 val percentageNotesInChords:Int,
+                 val phrase:PhraseParameters = PhraseParameters()) {
 
   require(Range(0, 101).contains(percentageOfSilence), "The percentage of silence needs to be between 0 and 100")
   require(Range(0, 101).contains(percentageNotesInChords), "The percentage of notes in chords needs to be between 0 and 100")
@@ -55,27 +53,6 @@ class GlobalParameters (val method:GenerationMethod,
   require(numOfNotesAtTheSameTimeUnit >= 1, "Number of notes at the same time unit needs to be >= 1")
 
   def sequenceLenght:Int = numBars * numBeatsPerBar
-
-}
-
-// TODO delete the dynamicParameters. they should exists only in genSession
-class DynamicParameters(val rhythmicDensity:Density.DensityVal,
-                        val variation:Int,
-                        val percentageNotesInChords:Int)
-
-case class Parameters(global:GlobalParameters, dynamic:List[DynamicParameters], samplingDynamicParametersPerBeat:Float){
-
-  def getDynamic(positionInTime:Float):DynamicParameters = {
-    dynamic match {
-      case Nil => global
-      case list:List[DynamicParameters] => dynamic.lift((positionInTime/samplingDynamicParametersPerBeat).ceil.toInt) match{
-        case None => global
-        case Some(a) => a
-      }
-    }
-  }
-
-  def samplingDynamicParametersInTotal:Int = math.floor(samplingDynamicParametersPerBeat * global.numBeatsPerBar).toInt
 
 
 }

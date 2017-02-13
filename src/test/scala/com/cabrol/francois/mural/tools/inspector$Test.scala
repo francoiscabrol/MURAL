@@ -12,7 +12,7 @@ class Inspector$Test extends FunSpec with BeforeAndAfter with Matchers {
     val parentNotes = List()
     val chords: Map[Float, HarmonicDefinition] = Map((0, HarmonicDefinition(new Chord("C"), new Scale("C major"))), (1, HarmonicDefinition(new Chord("Am"), new Scale("A minor"))))
     val hP = new HarmonicProgression(chords)
-    val generationMethod = Methods.rulesBased
+    val generationMethod = Methods.RULESBASED
     val numBeatsPerBar = 4
     val numBars = 4
     val ambitus: Ambitus = new Ambitus(28, 71)
@@ -21,9 +21,7 @@ class Inspector$Test extends FunSpec with BeforeAndAfter with Matchers {
     val numOfNoteAtTheSameTimeUnit = 1
     val density = Density.EIGHT_NOTE
     val variance = 0
-    val global = new GlobalParameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.up, variance, density, 0, percentageOfNoteInChord)
-    val dynamic: List[DynamicParameters] = List()
-    Parameters(global, dynamic, 1)
+    new Parameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.up, variance, density, 0, percentageOfNoteInChord)
   }
   
   val inspector = new Inspector(parameters)

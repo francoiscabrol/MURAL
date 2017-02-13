@@ -28,6 +28,7 @@ object Methods extends Enumeration {
 sealed case class Method() extends GenerationMethod {
   private def getObject : GenerationMethod = this match {
     case Methods.RULESBASED => new RuleBased
+    case _ => throw new Error("The method does not exists")
   }
 
   override def generateSequence(parameters: Parameters): List[Note] = getObject.generateSequence(parameters)

@@ -65,11 +65,11 @@ object SequenceOfPhraseGeneratorsFactory {
      * @return the new PhraseGenerator object
      */
     def createPhraseGenerator(startingPoint: Float):PhraseGenerator = {
-      val endingPoint = randomEndingPoint(parameters.global.sequenceLenght, startingPoint, parameters.global.phrase.gap.max)
+      val endingPoint = randomEndingPoint(parameters.sequenceLenght, startingPoint, parameters.phrase.gap.max)
       val startingNoteDegree = RandomUtils.randomElement(List(0, 2, 4))
-      val startingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(startingPoint).scale.getScaleNote(startingNoteDegree)
+      val startingNote:ScaleNote = parameters.harmonicProgression.getHarmonyForTheTimePosition(startingPoint).scale.getScaleNote(startingNoteDegree)
       val endingNoteDegree = RandomUtils.randomElement(List(0, 1, 2, 4, 6))
-      val endingNote:ScaleNote = parameters.global.harmonicProgression.getHarmonyForTheTimePosition(endingPoint).chord.getScaleNote(endingNoteDegree)
+      val endingNote:ScaleNote = parameters.harmonicProgression.getHarmonyForTheTimePosition(endingPoint).chord.getScaleNote(endingNoteDegree)
       new PhraseGenerator(startingPoint, endingPoint, startingNote, endingNote, parameters)
     }
 
@@ -87,15 +87,15 @@ object SequenceOfPhraseGeneratorsFactory {
      * @return
      */
     def createAnyPhraseGenerator(lastPhraseGenerator:PhraseGenerator):PhraseGenerator = {
-      val startingPoint = Math.round(lastPhraseGenerator.endingPoint + randomGapDurationBetweenTwoPhrases(parameters.global.sequenceLenght, lastPhraseGenerator.endingPoint, parameters.global.phrase.gap.max))
+      val startingPoint = Math.round(lastPhraseGenerator.endingPoint + randomGapDurationBetweenTwoPhrases(parameters.sequenceLenght, lastPhraseGenerator.endingPoint, parameters.phrase.gap.max))
       createPhraseGenerator(startingPoint)
     }
 
     def addPhrase(phrases:List[PhraseGenerator]):List[PhraseGenerator] = {
       // create new PhraseGenerator objects until the last phrase go out the sequence
-      if (phrases.last.startingPoint >= (parameters.global.sequenceLenght - 1)) // if the last phrase start after the sequence end
+      if (phrases.last.startingPoint >= (parameters.sequenceLenght - 1)) // if the last phrase start after the sequence end
         phrases.dropRight(1)                                                    // return the sequence without the last phrase
-      else if (phrases.last.endingPoint >= (parameters.global.sequenceLenght - 1)) //if the last phrase end after the sequence end
+      else if (phrases.last.endingPoint >= (parameters.sequenceLenght - 1)) //if the last phrase end after the sequence end
         phrases                                                                    // return the sequence // TODO should modify the last phrase to fit in the sequence?
       else
         addPhrase(phrases ::: List(createAnyPhraseGenerator(phrases.last)))
