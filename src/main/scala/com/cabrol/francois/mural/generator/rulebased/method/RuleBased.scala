@@ -29,7 +29,7 @@ import com.cabrol.francois.mural.tools.Debug
  * @author  Francois Cabrol <francois.cabrol@live.fr>
  * @since   2013-11-14
  */
-class RuleBased extends GenerationMethod {
+case class RuleBased extends GenerationMethod {
 
   private def generatePhrases(phraseGenerators:List[PhraseGenerator]):List[Note] = phraseGenerators.map(p => {p.generateThePhrase}).flatten
 

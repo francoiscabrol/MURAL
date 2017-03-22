@@ -21,7 +21,6 @@ object Test {
   def main(args: Array[String]) = {
     print("[TEST] Start the generator execution test")
 
-    val parentNotes = List()
     val hP = {
       val DO = HarmonicDefinition(new Chord("C"), new Scale("C major"))
       val SOL = HarmonicDefinition(new Chord("G"), new Scale("C major"))
@@ -29,16 +28,21 @@ object Test {
       val chords: Map[Float, HarmonicDefinition] = Map((0, DO), (2, SOL), (3, DO), (4, RE))
       new HarmonicProgression(chords)
     }
-    val generationMethod = Methods.RULESBASED
-    val numBeatsPerBar = 4
-    val numBars = 6
-    val ambitus: Ambitus = new Ambitus(40, 90)
-    val pSilence = 0
-    val percentageOfNoteInChord = 80
-    val numOfNoteAtTheSameTimeUnit = 1
-    val density = Density.EIGHT_NOTE
-    val variance = 1
-    val param = new Parameters(generationMethod, parentNotes, numBeatsPerBar, numBars, ambitus, hP, pSilence, numOfNoteAtTheSameTimeUnit, Direction.both, variance, density, 0, percentageOfNoteInChord, PhraseParameters(RangeInt(0, 6), RangeInt(0, 0)))
+    val param = new Parameters(
+      method = Methods.RULESBASED,
+      parentNotes = List(),
+      numBeatsPerBar = 4,
+      numBars = 6,
+      ambitus = new Ambitus(40, 90),
+      harmonicProgression = hP,
+      percentageOfSilence = 0,
+      numOfNotesAtTheSameTimeUnit = 1,
+      varianceDirection = Direction.both,
+      variance = 1,
+      rhythmicDensity = Density.EIGHT_NOTE,
+      variation = 0,
+      percentageNotesInChords = 80,
+      phrase = PhraseParameters(RangeInt(0, 6), RangeInt(0, 0)))
 
     var visuViews = mutable.MutableList[VisualiserView]()
 
